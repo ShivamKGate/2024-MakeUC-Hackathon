@@ -16,7 +16,7 @@ level_configs = {
     3: {"background": "assets/images/background/day_rooftop (2).png", "player_speed": 3.3, "initial_trash": 20, "respawn_threshold": 7, "respawn_amount": 7, "time_limit": 50, "storage_limit": 15},
     4: {"background": "assets/images/background/hospital.png", "player_speed": 3.4, "initial_trash": 25, "respawn_threshold": 9, "respawn_amount": 8, "time_limit": 45, "storage_limit": 18},
     5: {"background": "assets/images/background/market_place (2).png", "player_speed": 3.5, "initial_trash": 30, "respawn_threshold": 11, "respawn_amount": 9, "time_limit": 40, "storage_limit": 20},
-    6: {"background": "assets/images/background/newbeach.png", "player_speed": 3.6, "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 35, "storage_limit": 22},
+    6: {"background": "assets/images/background/school.png", "player_speed": 3.6, "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 35, "storage_limit": 22},
     7: {"background": "assets/images/background/night_view.png", "player_speed": 3.7, "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
     8: {"background": "assets/images/background/living_room.png", "player_speed": 3.8, "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 25, "storage_limit": 28},
     9: {"background": "assets/images/background/snow.png", "player_speed": 3.9, "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 20, "storage_limit": 30},
