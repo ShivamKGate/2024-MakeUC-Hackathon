@@ -5,6 +5,8 @@ from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.game_screen import game_screen, level_selection
 from screens.game_screen import level_configs
 from screens.shop import shop_screen
+from screens.get_started import get_started_screen
+
 
 # Pygame initialization
 pygame.init()
@@ -51,6 +53,13 @@ while True:
         pygame.display.flip()
         clock.tick(10)  # Adjust frame rate for GIF animation
     
+        
+    elif game_state == "login_menu":
+        # Call get_started_screen function to show login/signup screen
+        result = get_started_screen(screen)
+        if result == "main_lobby":
+            game_state = "level_selection"  # Set game state to main menu after login success
+    
     elif game_state == "level_selection":
         # Level selection screen
         level = level_selection(screen, font)
@@ -76,7 +85,7 @@ while True:
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                game_state = "level_selection"  # Move to level selection screen if clicked
+                game_state = "login_menu"  # Move to level selection screen if clicked
                 # if play_button_rect.collidepoint(event.pos):
                 #     game_state = "level_selection"  # Move to level selection screen if play is clicked
                 # elif shop_button_rect.collidepoint(event.pos):
