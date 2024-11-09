@@ -1,12 +1,15 @@
 import pygame
 import sys
-from db_manager import login_user
-from screens.main_menu import main_menu_screen
+from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.game_screen import game_screen, level_selection
 from screens.game_screen import level_configs
+import os
 
 # Pygame initialization
 pygame.init()
+pygame.mixer.init()  # Initialize the mixer for sound
+
+# Screen settings
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -22,14 +25,30 @@ player_image = pygame.image.load("assets/images/player.png")
 middle_trash_image = pygame.image.load("assets/images/middle_trash.png")
 trash_image = pygame.image.load("assets/images/trash_item.png")
 
+# Load and resize GIF frames
+gif_path = os.path.join("assets", "images", "trash_picking_animation.gif")
+frames = load_and_resize_gif(gif_path, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+# Load background music
+bgm_path = os.path.join("assets", "sounds", "energetic-bgm-242515.mp3")
+pygame.mixer.music.load(bgm_path)
+pygame.mixer.music.play(-1)  # Play in an infinite loop
+
+# Main game loop variables for main menu animation
+frame_index = 0
+clock = pygame.time.Clock()
+
 # Main game loop
 while True:
     screen.fill((255, 255, 255))
     
     # Main menu and game state handling
     if game_state == "main_menu":
-        play_button_rect, prev_games_button_rect, achievements_button_rect = main_menu_screen(screen, font, SCREEN_WIDTH, SCREEN_HEIGHT)
-    
+        # Display animated main menu screen
+        frame_index = main_menu_screen(screen, frames, frame_index)
+        pygame.display.flip()
+        clock.tick(10)  # Adjust frame rate for GIF animation
+
     elif game_state == "level_selection":
         # Get the level selected by the player
         level = level_selection(screen, font)
@@ -48,7 +67,8 @@ while True:
             sys.exit()
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if game_state == "main_menu" and play_button_rect.collidepoint(event.pos):
-                game_state = "level_selection"  # Move to level selection screen if play is clicked
+            # Check if "Press Here to Start" was clicked
+            if game_state == "main_menu":
+                game_state = "level_selection"  # Move to level selection screen if clicked
     
     pygame.display.flip()

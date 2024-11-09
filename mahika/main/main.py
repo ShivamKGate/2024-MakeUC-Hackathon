@@ -6,7 +6,7 @@ import os
 pygame.init()
 
 # Load GIF frames using PIL
-gif_path = os.path.join(os.path.dirname(__file__), "..", "image", "trash_picking_animation.gif")
+gif_path = "..\..\\assets\\images\\trash_picking_animation.gif"
 gif = Image.open(gif_path)
 frames = [pygame.image.fromstring(frame.convert("RGBA").tobytes(), frame.size, "RGBA") 
           for frame in ImageSequence.Iterator(gif)]
