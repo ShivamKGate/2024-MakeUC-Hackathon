@@ -2,11 +2,10 @@ import pygame
 import sys
 import os
 from screens.main_menu import main_menu_screen, load_and_resize_gif
-from screens.game_screen import game_screen, level_selection
-from screens.game_screen import level_configs
+from screens.game_screen import game_screen, level_selection, level_configs
 from screens.shop import shop_screen
 from screens.get_started import get_started_screen
-
+from screens.end_game import end_game_screen
 
 # Pygame initialization
 pygame.init()
@@ -18,11 +17,11 @@ SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Cleanify")
 font = pygame.font.Font(None, 36)
-game_state = "main_menu"  # Possible states: login_menu, main_menu, level_selection, game_screen, shop
+game_state = "main_menu"
 user_data = None
-level = None  # Initialize level to None
-level_data = None  # Initialize level_data to None
-currency = 0  # Initialize currency (collected trash) for the player
+level = None
+level_data = None
+currency = 0
 
 # Load images
 player_image = pygame.image.load("assets/images/player.png")
@@ -36,7 +35,7 @@ frames = load_and_resize_gif(gif_path, SCREEN_WIDTH, SCREEN_HEIGHT)
 # Load background music
 bgm_path = os.path.join("assets", "sounds", "energetic-bgm-242515.mp3")
 pygame.mixer.music.load(bgm_path)
-pygame.mixer.music.play(-1)  # Play in an infinite loop
+pygame.mixer.music.play(-1)
 
 # Main game loop variables for main menu animation
 frame_index = 0
@@ -48,10 +47,9 @@ while True:
     
     # Main menu and game state handling
     if game_state == "main_menu":
-        # Display animated main menu screen
         frame_index = main_menu_screen(screen, frames, frame_index)
         pygame.display.flip()
-        clock.tick(10)  # Adjust frame rate for GIF animation
+        clock.tick(10)
     
         
     elif game_state == "login_menu":
@@ -61,21 +59,28 @@ while True:
             game_state = "level_selection"  # Set game state to main menu after login success
     
     elif game_state == "level_selection":
-        # Level selection screen
         level = level_selection(screen, font)
-        level_data = level_configs.get(level)  # Retrieve configuration for the selected level
-        if level_data:  # Ensure level_data is valid
-            game_state = "game_screen"  # Move to game screen after selection
+        level_data = level_configs.get(level)
+        if level_data:
+            game_state = "game_screen"
 
     elif game_state == "game_screen" and level_data is not None:
-        # Start the game screen with the selected level data
         currency = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
-        game_state = "main_menu"  # Return to main menu after level ends
+        game_state = "end_game"  # Move to end game screen after level ends
 
     elif game_state == "shop":
-        # Open the shop screen
         currency = shop_screen(screen, font, currency)
-        game_state = "main_menu"  # Return to main menu after visiting shop
+        game_state = "main_menu"
+
+    elif game_state == "end_game":
+        # Display end game screen with GIF animation
+        action, frame_index = end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index)
+        if action == "replay":
+            game_state = "game_screen"  # Restart level
+        elif action == "level_selection":
+            game_state = "level_selection"  # Go back to level selection
+        elif action == "main_menu":
+            game_state = "main_menu"  # Go back to main menu
 
     # Event handling
     for event in pygame.event.get():

@@ -9,18 +9,18 @@ pickup_sound = pygame.mixer.Sound(pickup_file)
 end_file = "./assets/sounds/level-win-6416.mp3"
 end_sound = pygame.mixer.Sound(end_file)
 
-# Define level configurations
+# Define level configurations without player_speed
 level_configs = {
-    1: {"background": "assets/images/background/city_view.png", "player_speed": 3, "initial_trash": 10, "respawn_threshold": 3, "respawn_amount": 5, "time_limit": 60, "storage_limit": 10},
-    2: {"background": "assets/images/background/dark_forest.png", "player_speed": 3.2, "initial_trash": 15, "respawn_threshold": 5, "respawn_amount": 6, "time_limit": 55, "storage_limit": 12},
-    3: {"background": "assets/images/background/day_rooftop (2).png", "player_speed": 3.3, "initial_trash": 20, "respawn_threshold": 7, "respawn_amount": 7, "time_limit": 50, "storage_limit": 15},
-    4: {"background": "assets/images/background/hospital.png", "player_speed": 3.4, "initial_trash": 25, "respawn_threshold": 9, "respawn_amount": 8, "time_limit": 45, "storage_limit": 18},
-    5: {"background": "assets/images/background/market_place (2).png", "player_speed": 3.5, "initial_trash": 30, "respawn_threshold": 11, "respawn_amount": 9, "time_limit": 40, "storage_limit": 20},
-    6: {"background": "assets/images/background/school.png", "player_speed": 3.6, "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 35, "storage_limit": 22},
-    7: {"background": "assets/images/background/night_view.png", "player_speed": 3.7, "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
-    8: {"background": "assets/images/background/living_room.png", "player_speed": 3.8, "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 25, "storage_limit": 28},
-    9: {"background": "assets/images/background/snow.png", "player_speed": 3.9, "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 20, "storage_limit": 30},
-    10: {"background": "assets/images/background/dayforest.png", "player_speed": 4, "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 15, "storage_limit": 32}
+    1: {"background": "assets/images/background/city_view.png", "initial_trash": 10, "respawn_threshold": 3, "respawn_amount": 5, "time_limit": 60, "storage_limit": 10},
+    2: {"background": "assets/images/background/dark_forest.png", "initial_trash": 15, "respawn_threshold": 5, "respawn_amount": 6, "time_limit": 55, "storage_limit": 12},
+    3: {"background": "assets/images/background/day_rooftop (2).png", "initial_trash": 20, "respawn_threshold": 7, "respawn_amount": 7, "time_limit": 50, "storage_limit": 15},
+    4: {"background": "assets/images/background/hospital.png", "initial_trash": 25, "respawn_threshold": 9, "respawn_amount": 8, "time_limit": 45, "storage_limit": 18},
+    5: {"background": "assets/images/background/market_place (2).png", "initial_trash": 30, "respawn_threshold": 11, "respawn_amount": 9, "time_limit": 40, "storage_limit": 20},
+    6: {"background": "assets/images/background/school.png", "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 35, "storage_limit": 22},
+    7: {"background": "assets/images/background/night_view.png", "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
+    8: {"background": "assets/images/background/living_room.png", "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 25, "storage_limit": 28},
+    9: {"background": "assets/images/background/snow.png", "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 20, "storage_limit": 30},
+    10: {"background": "assets/images/background/dayforest.png", "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 15, "storage_limit": 32}
 }
 
 # Game screen function for each level
@@ -35,7 +35,6 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
     # Player setup
     player_rect = player_image.get_rect()
     player_rect.topleft = (100, 100)
-    player_speed = level_data["player_speed"]
 
     # Trash setup based on level data
     INITIAL_TRASH_COUNT = level_data["initial_trash"]
@@ -70,16 +69,16 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
                 pygame.quit()
                 exit()
 
-        # Player movement
+        # Player movement without player_speed
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player_rect.left > 0:
-            player_rect.x -= player_speed
+            player_rect.x -= 1
         if keys[pygame.K_RIGHT] and player_rect.right < screen_width:
-            player_rect.x += player_speed
+            player_rect.x += 1
         if keys[pygame.K_UP] and player_rect.top > 0:
-            player_rect.y -= player_speed
+            player_rect.y -= 1
         if keys[pygame.K_DOWN] and player_rect.bottom < screen_height:
-            player_rect.y += player_speed
+            player_rect.y += 1
 
         # Display timer
         elapsed_time = int(time.time() - start_time)
@@ -138,16 +137,18 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
 
         pygame.display.flip()
 
-# Function for level selection
 def level_selection(screen, font):
     screen.fill((255, 255, 255))
     title_text = font.render("Select Level", True, (0, 0, 0))
     screen.blit(title_text, (screen.get_width() // 2 - title_text.get_width() // 2, 50))
 
     level_buttons = []
+    y_offset = 100  # Start position for the first button
+    spacing = 40    # Reduced spacing between levels to fit all within the screen height
+
     for i in range(1, 11):
         level_text = font.render(f"Level {i}", True, (0, 0, 0))
-        button_rect = pygame.Rect(100, 100 + i * 50, level_text.get_width() + 20, level_text.get_height() + 10)
+        button_rect = pygame.Rect(100, y_offset + i * spacing, level_text.get_width() + 20, level_text.get_height() + 10)
         level_buttons.append((button_rect, i))
         screen.blit(level_text, (button_rect.x + 10, button_rect.y + 5))
 
@@ -165,6 +166,8 @@ def level_selection(screen, font):
                         selecting = False
                         return level
 
+
 # Example usage
+# Uncomment the following lines to run the level selection and game screen
 # level = level_selection(screen, font)
-# game_screen(screen, font, player_image, middle_trash_image, trash_image, screen_width, screen_height, level_configs[level])
+# game_screen(screen, font, player_image, middle_trash_image, trash_image, screen_width, screen_height, level_configs[level], level)
