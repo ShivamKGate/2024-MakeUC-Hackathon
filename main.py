@@ -1,9 +1,9 @@
 import pygame
 import sys
+import os
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.game_screen import game_screen, level_selection
 from screens.game_screen import level_configs
-import os
 from screens.shop import shop_screen
 
 # Pygame initialization
@@ -46,8 +46,10 @@ while True:
     
     # Main menu and game state handling
     if game_state == "main_menu":
-        # Display main menu and capture button rects
-        play_button_rect, prev_games_button_rect, achievements_button_rect, shop_button_rect = main_menu_screen(screen, font, SCREEN_WIDTH, SCREEN_HEIGHT)
+        # Display animated main menu screen
+        frame_index = main_menu_screen(screen, frames, frame_index)
+        pygame.display.flip()
+        clock.tick(10)  # Adjust frame rate for GIF animation
     
     elif game_state == "level_selection":
         # Level selection screen
@@ -74,9 +76,10 @@ while True:
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                if play_button_rect.collidepoint(event.pos):
-                    game_state = "level_selection"  # Move to level selection screen if play is clicked
-                elif shop_button_rect.collidepoint(event.pos):
-                    game_state = "shop"  # Move to shop screen if shop is clicked
+                game_state = "level_selection"  # Move to level selection screen if clicked
+                # if play_button_rect.collidepoint(event.pos):
+                #     game_state = "level_selection"  # Move to level selection screen if play is clicked
+                # elif shop_button_rect.collidepoint(event.pos):
+                #     game_state = "shop"  # Move to shop screen if shop is clicked
     
     pygame.display.flip()
