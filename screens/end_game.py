@@ -1,6 +1,7 @@
 # end_game.py
 import pygame
 import sys
+from screens.game_screen import level_selection
 
 def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT):
     screen.fill((255, 255, 255))  # Set background color
@@ -63,7 +64,7 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT):
             if replay_button_rect.collidepoint(event.pos):
                 return "replay"
             elif main_menu_button_rect.collidepoint(event.pos):
-                return "level_selection"
+                return level_selection(screen, font)
             elif exit_button_rect.collidepoint(event.pos):
                 pygame.quit()
                 sys.exit()
