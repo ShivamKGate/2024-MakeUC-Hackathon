@@ -1,10 +1,15 @@
-# end_game.py
 import pygame
 import sys
-from screens.game_screen import level_selection
 
-def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT):
+def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index):
     screen.fill((255, 255, 255))  # Set background color
+    
+    # Display the current GIF frame
+    screen.blit(frames[frame_index], (0, 0))  # Adjust position as needed
+    
+    # Cycle through GIF frames
+    frame_index = (frame_index + 1) % len(frames)
+    
     text_color = (0, 0, 0)
     button_color = (200, 200, 200)
     hover_color = (150, 150, 150)
@@ -62,11 +67,11 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT):
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if replay_button_rect.collidepoint(event.pos):
-                return "replay"
+                return "replay", frame_index
             elif main_menu_button_rect.collidepoint(event.pos):
-                return level_selection(screen, font)
+                return "level_selection", frame_index
             elif exit_button_rect.collidepoint(event.pos):
                 pygame.quit()
                 sys.exit()
     
-    return None
+    return None, frame_index

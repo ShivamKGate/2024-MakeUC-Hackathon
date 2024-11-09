@@ -4,7 +4,7 @@ import os
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.game_screen import game_screen, level_selection, level_configs
 from screens.shop import shop_screen
-from screens.end_game import end_game_screen  # Import the end game screen
+from screens.end_game import end_game_screen
 
 # Pygame initialization
 pygame.init()
@@ -65,10 +65,12 @@ while True:
         game_state = "main_menu"
 
     elif game_state == "end_game":
-        # Display end game screen and handle responses
-        action = end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT)
+        # Display end game screen with GIF animation
+        action, frame_index = end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index)
         if action == "replay":
             game_state = "game_screen"  # Restart level
+        elif action == "level_selection":
+            game_state = "level_selection"  # Go back to level selection
         elif action == "main_menu":
             game_state = "main_menu"  # Go back to main menu
 
