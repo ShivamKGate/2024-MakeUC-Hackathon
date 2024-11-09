@@ -53,13 +53,27 @@ def draw_candy_text(surface, text, pos, frame_index):
         letter_rect = letter_surface.get_rect(center=(x_offset + i * letter_spacing, pos[1] + y_offset))
         surface.blit(letter_surface, letter_rect)
 
-# Function to display the main menu screen with animated GIF background
+# Function to display the main menu screen with animated GIF background and clickable text
 def main_menu_screen(screen, frames, frame_index):
     # Draw the current frame on the screen
     screen.blit(frames[frame_index], (0, 0))
     frame_index = (frame_index + 1) % len(frames)  # Loop through frames
 
+    # Position for "Press Here to Start" text
+    text_pos = (screen.get_width() // 2, screen.get_height() // 2)
+    
     # Draw the stylized "Press Here to Start" text with curvy effect
-    draw_candy_text(screen, "Press Here to Start", (screen.get_width() // 2, screen.get_height() // 2), frame_index)
+    draw_candy_text(screen, "Press Here to Start", text_pos, frame_index)
+
+    # Create a clickable rectangle for "Press Here to Start" text
+    font = pygame.font.SysFont("Comic Sans MS", 64, bold=True)
+    text_surface = font.render("Press Here to Start", True, (0, 0, 0))
+    text_rect = text_surface.get_rect(center=text_pos)
+
+    # Check for clicks
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if text_rect.collidepoint(event.pos):
+                return "start_game"  # Signal to main loop to change game state
 
     return frame_index
