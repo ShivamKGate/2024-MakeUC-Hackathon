@@ -17,7 +17,7 @@ level_configs = {
     4: {"background": "assets/images/background4.png", "player_speed": 3.4, "initial_trash": 25, "respawn_threshold": 9, "respawn_amount": 8, "time_limit": 45, "storage_limit": 18},
     5: {"background": "assets/images/background5.png", "player_speed": 3.5, "initial_trash": 30, "respawn_threshold": 11, "respawn_amount": 9, "time_limit": 40, "storage_limit": 20},
     6: {"background": "assets/images/background6.png", "player_speed": 3.6, "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 35, "storage_limit": 22},
-    7: {"background": "assets/images/background7.png", "player_speed": 3.7, "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
+    7: {"background": "assets/images/background/night_view.png", "player_speed": 3.7, "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
     8: {"background": "assets/images/background8.png", "player_speed": 3.8, "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 25, "storage_limit": 28},
     9: {"background": "assets/images/background9.png", "player_speed": 3.9, "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 20, "storage_limit": 30},
     10: {"background": "assets/images/background10.png", "player_speed": 4, "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 15, "storage_limit": 32}
