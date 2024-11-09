@@ -1,51 +1,54 @@
-# main.py
 import pygame
 import sys
 from db_manager import login_user
-# from screens.login_screen import login_screen
 from screens.main_menu import main_menu_screen
-from screens.game_screen import game_screen
+from screens.game_screen import game_screen, level_selection
+from screens.game_screen import level_configs
 
 # Pygame initialization
 pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Beach Cleanup Adventure")
+pygame.display.set_caption("Cleanify")
 font = pygame.font.Font(None, 36)
-game_state = "main_menu"  # Possible states: login_menu, main_menu, game_screen
+game_state = "main_menu"  # Possible states: login_menu, main_menu, level_selection, game_screen
 user_data = None
+level = None  # Initialize level to None
+level_data = None  # Initialize level_data to None
 
 # Load images
 player_image = pygame.image.load("assets/images/player.png")
 middle_trash_image = pygame.image.load("assets/images/middle_trash.png")
 trash_image = pygame.image.load("assets/images/trash_item.png")
 
+# Main game loop
 while True:
     screen.fill((255, 255, 255))
     
-    # if game_state == "login_menu":
-    #     login_button_rect, signup_button_rect = login_screen(screen, font, SCREEN_WIDTH, SCREEN_HEIGHT)
-        
+    # Main menu and game state handling
     if game_state == "main_menu":
         play_button_rect, prev_games_button_rect, achievements_button_rect = main_menu_screen(screen, font, SCREEN_WIDTH, SCREEN_HEIGHT)
-        
-    elif game_state == "game_screen":
-        game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT)
     
+    elif game_state == "level_selection":
+        # Get the level selected by the player
+        level = level_selection(screen, font)
+        level_data = level_configs.get(level)  # Retrieve configuration for the selected level
+        if level_data:  # Ensure level_data is valid
+            game_state = "game_screen"  # Move to game screen after selection
+
+    elif game_state == "game_screen" and level_data is not None:
+        # Start the game screen with the selected level data
+        game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
+
+    # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if game_state == "login_menu" and login_button_rect.collidepoint(event.pos):
-                email = input("Enter Email: ")
-                password = input("Enter Password: ")
-                user_data = login_user(email, password)
-                if user_data:
-                    game_state = "main_menu"
-            elif game_state == "main_menu" and play_button_rect.collidepoint(event.pos):
-                game_state = "game_screen"
+            if game_state == "main_menu" and play_button_rect.collidepoint(event.pos):
+                game_state = "level_selection"  # Move to level selection screen if play is clicked
     
     pygame.display.flip()
