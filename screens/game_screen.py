@@ -137,16 +137,18 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
 
         pygame.display.flip()
 
-# Function for level selection
 def level_selection(screen, font):
     screen.fill((255, 255, 255))
     title_text = font.render("Select Level", True, (0, 0, 0))
     screen.blit(title_text, (screen.get_width() // 2 - title_text.get_width() // 2, 50))
 
     level_buttons = []
+    y_offset = 100  # Start position for the first button
+    spacing = 40    # Reduced spacing between levels to fit all within the screen height
+
     for i in range(1, 11):
         level_text = font.render(f"Level {i}", True, (0, 0, 0))
-        button_rect = pygame.Rect(100, 100 + i * 50, level_text.get_width() + 20, level_text.get_height() + 10)
+        button_rect = pygame.Rect(100, y_offset + i * spacing, level_text.get_width() + 20, level_text.get_height() + 10)
         level_buttons.append((button_rect, i))
         screen.blit(level_text, (button_rect.x + 10, button_rect.y + 5))
 
@@ -163,6 +165,7 @@ def level_selection(screen, font):
                     if button.collidepoint(event.pos):
                         selecting = False
                         return level
+
 
 # Example usage
 # Uncomment the following lines to run the level selection and game screen
