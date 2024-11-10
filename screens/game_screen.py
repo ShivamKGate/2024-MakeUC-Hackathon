@@ -68,7 +68,7 @@ def check_level_completion(username, score, score_threshold=50):
     return False
 
 def display_level_up_message(username, screen):
-    level_up_text = bold_font.render(f"Level Up!\n{get_current_level(username)}", True, RED)
+    level_up_text = bold_font.render(f"Level Up!{get_current_level(username)}", True, RED)
     shadow_text = bold_font.render("Level Up!", True, FADED_OCHRE_YELLOW)
     shadow_rect = shadow_text.get_rect(center=(SCREEN_WIDTH // 2 + 3, SCREEN_HEIGHT // 2 + 3))
     text_rect = level_up_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -86,6 +86,7 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
     player_image = pygame.transform.scale(player_image, (75, 75))
     middle_trash_image = pygame.transform.scale(middle_trash_image, (120, 120))
     trash_image = pygame.transform.scale(trash_image, (30, 30))
+    trash_collected = 0
 
     # Player and gameplay setup
     player_rect = player_image.get_rect()
@@ -96,6 +97,7 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
 
     TIME_LIMIT = level_data["time_limit"]
     start_time = time.time()
+    time_taken = time.time()
     storage, score, streak, multiplier = 0, 0, 0, 1
     game_over = False
     paused = False
@@ -151,6 +153,7 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
 
             # Display timer
             elapsed_time = int(time.time() - start_time)
+            time_taken = elapsed_time
             remaining_time = max(TIME_LIMIT - elapsed_time, 0)
             timer_text = font.render(f"Time Left: {remaining_time}s", True, (0, 0, 0))
             screen.blit(timer_text, (10, 10))
@@ -186,6 +189,7 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
                     storage += 1
                     score += 1 * multiplier
                     streak += 1
+                    trash_collected += 1  # Increment the number of trash collected by the player
                     # Update the currency for each piece of trash collected
                     user_data["currentCurrency"] += 1  # Add currency locally
                     update_currency(user_data["playerName"], 1)  # Update currency in the database
@@ -200,6 +204,9 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
                 storage, streak, multiplier = 0, 0, 1
 
         pygame.display.flip()
-    if check_level_completion(user_data["playerName"], user_data["currentLevel"], score):
-        display_level_up_message(user_data["playerName"], screen)  # Show level-up message
-    return score, "end_game"  # Default return when the game ends
+    print(f"{level} {user_data["currentLevel"]}")
+    if level >= user_data["currentLevel"]:
+        if check_level_completion(user_data["playerName"], score,10):
+            display_level_up_message(user_data["playerName"], screen)  # Show level-up message
+    return "end_game", score, trash_collected, time_taken
+

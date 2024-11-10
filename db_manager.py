@@ -25,7 +25,7 @@ def create_user(email, password, player_name):
         "currentLevel": 1,
         "highestScore": 0,
         "currentCurrency": 0,  # Initialize with 0 currency
-        "previousGames": [],
+        "previousGames": {},
         "Achievements": []
     }
     login_data_collection.insert_one(new_user)
@@ -35,6 +35,22 @@ def login_user(email, password):
     if user and bcrypt.checkpw(password.encode(), user["password"]):
         return user  # Return user data for session
     return None
+
+def save_last_game(player_name, level, score, trash_collected, facts):
+    """
+    Adds the latest game data to the user's profile in the 'previousGames' array.
+    Only keeps the latest game.
+    """
+    game_data = {
+        "level": level,
+        "score": score,
+        "trash_collected": trash_collected,
+        "facts_learned": facts
+    }
+    login_data_collection.update_one(
+        {"playerName": player_name},
+        {"$set": {"previousGames": game_data}}
+    )
 
 def save_game_session(email, score, trash_collected, level):
     session_data = {
@@ -108,3 +124,29 @@ def fetch_user_data(username):
         return user  # Return the user data as a dictionary
     
     return None  # Return None if user not found
+
+def get_all_achievements(player_name):
+    """
+    Retrieve all achievements (facts) for the user by player name.
+    :param player_name: The player's name in the database.
+    :return: Dictionary of achievements or an empty dictionary if none found.
+    """
+    user = login_data_collection.find_one({"playerName": player_name})
+    return user.get("achievements", {}) if user else {}
+
+def add_achievements(player_name, level, facts):
+    """
+    Add new facts to the user's achievements for a specific level.
+    :param player_name: The player's name in the database.
+    :param level: Level number (key in the achievements dictionary).
+    :param facts: List of facts to add to the achievements.
+    """
+    try:
+        # Use MongoDB's $addToSet to avoid duplicate facts in the array
+        login_data_collection.update_one(
+            {"playerName": player_name},
+            {"$addToSet": {f"achievements.{level}": {"$each": facts}}}
+        )
+        print(f"Successfully added achievements for level {level}")
+    except Exception as e:
+        print(f"Error updating achievements: {e}")

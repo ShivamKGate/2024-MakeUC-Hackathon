@@ -2,9 +2,66 @@
     "_id": "673003aa94e2ff1ef6e55c45",
     "email": "22",
     "playerName": "222",
-    "currentLevel": 7,
+    "currentLevel": 3,
     "highestScore": 0,
-    "previousGames": [],
+    "previousGames": {
+        "level": 2,
+        "score": 95,
+        "trash_collected": 28,
+        "facts_learned": [
+            "Switching to LED street lights in a neighborhood can save energy and reduce city emissions.",
+            "Creating neighborhood recycling drop-off spots improves waste management practices.",
+            "Installing smart meters in homes allows communities to reduce peak energy usage."
+        ]
+    },
     "Achievements": [],
-    "currentCurrency": 2796560
+    "currentCurrency": 2797364,
+    "achievements": {
+        "10": [
+            "The Arctic could be ice-free by 2040 if global warming continues at its current rate.",
+            "Global wetland restoration could capture over 100 gigatons of CO2 annually.",
+            "Restoring 15% of converted lands worldwide could avoid 60% of expected extinctions.",
+            "Switching all fossil fuel subsidies to renewable energy could drive down emissions drastically.",
+            "If all industries adopt circular economies, waste generation could be halved worldwide.",
+            "Switching to plant-based diets worldwide could cut greenhouse gas emissions by over 60%.",
+            "Reducing global heating to 1.5\u00b0C could prevent severe weather events and ecosystem loss.",
+            "Removing methane emissions from agriculture could lower global temperatures by 0.2\u00b0C.",
+            "Protecting 30% of the planet\u2019s land and oceans by 2030 could prevent mass extinctions and stabilize the climate.",
+            "Rising sea levels could displace millions of people by 2050 if action isn't taken on emissions.",
+            "Preserving global coral reefs could protect fisheries and biodiversity supporting over a billion people.",
+            "Recycling rates of 100% worldwide could conserve resources and reduce emissions by billions of tons.",
+            "Reducing global fossil fuel use by 50% could prevent severe climate consequences.",
+            "If all countries upheld the Paris Agreement, global temperatures could be kept within safe limits.",
+            "If sustainable practices are adopted globally, freshwater scarcity could be alleviated by 2040."
+        ],
+        "5": [
+            "Growing bamboo in community areas captures carbon, grows quickly, and provides renewable resources.",
+            "Cycling or walking instead of driving short distances can reduce urban pollution and improve air quality.",
+            "Upgrading to a high-efficiency furnace can cut winter heating bills and reduce emissions."
+        ],
+        "7": [
+            "Switching to plant-based packaging prevents plastic pollution in oceans and landfills.",
+            "Recycling metal reduces the need for mining, which disrupts ecosystems and releases CO2.",
+            "Reducing paper usage in offices by switching to digital saves millions of trees annually."
+        ],
+        "1": [
+            "A single reusable straw can replace hundreds of disposable plastic straws over its lifetime.",
+            "Air drying your hair instead of using a dryer can save a significant amount of energy.",
+            "Using a drying rack instead of a dryer can save energy and make clothes last longer.",
+            "Using rechargeable batteries instead of disposables reduces toxic waste in landfills.",
+            "Turning off lights when you leave a room can save energy and reduce your electricity bill.",
+            "Setting your fridge temperature to 37\u00b0F and freezer to 0\u00b0F saves energy.",
+            "Replacing old light bulbs with LEDs can reduce energy use by 75%.",
+            "Reducing thermostat settings by 1\u00b0F in winter can save 1% on heating bills.",
+            "Choosing paperless billing helps reduce paper waste and saves trees.",
+            "Using natural light instead of artificial lighting during the day reduces energy consumption.",
+            "Recycling glass reduces water pollution by 50% and air pollution by 20% compared to making new glass.",
+            "Recycling one plastic bottle can save enough energy to power a 60-watt light bulb for three hours."
+        ],
+        "2": [
+            "Switching to LED street lights in a neighborhood can save energy and reduce city emissions.",
+            "Creating neighborhood recycling drop-off spots improves waste management practices.",
+            "Installing smart meters in homes allows communities to reduce peak energy usage."
+        ]
+    }
 }
