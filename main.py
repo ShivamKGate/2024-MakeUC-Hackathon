@@ -160,7 +160,7 @@ while running:
         if game_data:
             action = previous_game_screen(screen, font, game_data, SCREEN_WIDTH, SCREEN_HEIGHT, user_data)
             if action == "back":
-                game_state = "achievements"  # Return to achievements screen
+                game_state = "level_selection"  # Return to achievements screen
         else:
             print("No previous game data available.")
             game_state = "level_selection"  # Return to achievements if no previous game found

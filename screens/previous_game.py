@@ -8,10 +8,13 @@ FADED_OCHRE_YELLOW = (245, 222, 179)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 
-def previous_game_screen(screen, font, game_data, screen_width, screen_height, user_data):
-    # Background
-    screen.fill((30, 30, 30))  # Dark background color
+# Load background image at the start
+background_image = pygame.image.load('assets/images/level_selection.png')  # Change this to the path of your new cute background image
+background_image = pygame.transform.scale(background_image, (800, 600))  # Scale to fit screen
 
+def previous_game_screen(screen, font, game_data, screen_width, screen_height, user_data):
+    screen.blit(background_image, (0, 0))  # Draw the background image at the top-left corner
+    # Background
     # Title
     title = font.render("Previous Game Stats", True, RED)
     screen.blit(title, (screen_width // 2 - title.get_width() // 2, 30))
@@ -23,7 +26,7 @@ def previous_game_screen(screen, font, game_data, screen_width, screen_height, u
     screen.blit(summary_overlay, summary_overlay_rect.topleft)
 
     # Display game summary
-    summary_title = font.render("Game Summary", True, WHITE)
+    summary_title = font.render("Game Summary", True, RED)
     screen.blit(summary_title, (screen_width // 2 - summary_title.get_width() // 2, 110))
 
     # Game details
@@ -42,7 +45,7 @@ def previous_game_screen(screen, font, game_data, screen_width, screen_height, u
     screen.blit(facts_overlay, facts_overlay_rect.topleft)
 
     # Display learned facts
-    facts_title = font.render("Facts Learned", True, WHITE)
+    facts_title = font.render("Facts Learned", True, RED)
     screen.blit(facts_title, (screen_width // 2 - facts_title.get_width() // 2, 310))
     
     fact_font = pygame.font.Font(None, 18)

@@ -2,15 +2,52 @@
     "_id": "6730d00f5ae572bd99161c35",
     "email": "1212",
     "playerName": "12",
-    "currentLevel": 1,
+    "currentLevel": 2,
     "highestScore": 0,
-    "currentCurrency": 9950,
-    "previousGames": {},
+    "currentCurrency": 9320,
+    "previousGames": {
+        "level": 1,
+        "score": 62,
+        "trash_collected": 20,
+        "facts_learned": [
+            "Walking or biking to work reduces greenhouse gas emissions and promotes better health.",
+            "Eating less beef can lower your carbon footprint because beef production generates high emissions.",
+            "An average plastic bottle takes 450 years to decompose. Recycling can prevent long-term waste."
+        ]
+    },
     "Achievements": [],
     "achievements": {
         "2": [
             "Swapping lawn mowers for native plants reduces maintenance and provides wildlife habitat.",
-            "Every ton of newspaper recycled can save enough energy to power a home for six months."
+            "Every ton of newspaper recycled can save enough energy to power a home for six months.",
+            "Installing smart meters in homes allows communities to reduce peak energy usage.",
+            "Promoting local farm produce reduces the need for long-distance food transportation.",
+            "Recycling electronics reduces the need for harmful metal mining and disposal."
+        ],
+        "1": [
+            "Walking or biking to work reduces greenhouse gas emissions and promotes better health.",
+            "Eating less beef can lower your carbon footprint because beef production generates high emissions.",
+            "An average plastic bottle takes 450 years to decompose. Recycling can prevent long-term waste."
+        ],
+        "6": [
+            "Using energy-efficient computer equipment reduces electricity consumption in workplaces by up to 30%.",
+            "Installing low-flow showerheads can cut water usage by 40% and save energy for water heating.",
+            "Adding a storm door can increase energy efficiency by up to 45%, depending on the climate."
+        ],
+        "9": [
+            "The Amazon rainforest produces 20% of the world\u2019s oxygen, yet deforestation is rapidly decreasing its capacity.",
+            "Switching to electric heat pumps worldwide could reduce CO2 emissions by over 1 billion tons per year.",
+            "The protection of marine ecosystems could support carbon capture on a massive scale."
+        ],
+        "5": [
+            "Growing bamboo in community areas captures carbon, grows quickly, and provides renewable resources.",
+            "Driving a fuel-efficient car can save thousands of pounds of CO2 emissions annually.",
+            "Participating in local clean-up drives improves community spaces and reduces pollution."
+        ],
+        "10": [
+            "Global biodiversity loss can disrupt ecosystems and food chains essential for human survival.",
+            "Global wetland restoration could capture over 100 gigatons of CO2 annually.",
+            "A worldwide shift to plant-based diets could reduce food-related emissions by 70%."
         ]
     }
 }

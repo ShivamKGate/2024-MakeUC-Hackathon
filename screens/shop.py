@@ -13,6 +13,10 @@ RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+# Load background image at the start
+background_image = pygame.image.load('assets/images/level_selection.png')  # Change this to the path of your new cute background image
+background_image = pygame.transform.scale(background_image, (800, 600))  # Scale to fit screen
+
 # Shop items - these are the items available for purchase
 shop_items = [
     {"name": "2-Environmental Facts", "price": 50, "description": "Unlocks 2 Unknown Environmental Facts."},
@@ -43,12 +47,12 @@ def show_purchase_confirmation(screen, font, item_name):
 
 # Function to draw shop screen
 def shop_screen(screen, font, currency, user_data):
-    screen.fill((30, 30, 30))  # Background color
+    screen.blit(background_image, (0, 0))  # Draw the background image at the top-left corner
     title = font.render("Shop", True, RED)
     screen.blit(title, (screen.get_width() // 2 - title.get_width() // 2, 30))
 
     # Draw currency
-    currency_text = font.render(f"Your Currency: {user_data['currentCurrency']}", True, (0, 128, 0))
+    currency_text = font.render(f"Your Currency: {user_data['currentCurrency']}", True, (0,0,0))
     screen.blit(currency_text, (50, 50))
 
     # Display items
@@ -74,13 +78,13 @@ def shop_screen(screen, font, currency, user_data):
 
     # Exit button
     exit_button_rect = pygame.Rect(screen.get_width() - 100, screen.get_height() - 60, 80, 40)
-    pygame.draw.rect(screen, RED, exit_button_rect)
-    exit_text = font.render("Exit", True, WHITE)
+    pygame.draw.rect(screen, FADED_OCHRE_YELLOW, exit_button_rect)
+    exit_text = font.render("Exit", True, RED)
     screen.blit(exit_text, exit_text.get_rect(center=exit_button_rect.center))
 
     achievements_button_rect = pygame.Rect(screen.get_width() // 2 - 60, screen.get_height() - 90, 200, 40)
-    pygame.draw.rect(screen, RED, achievements_button_rect)
-    achievements_text = font.render("Achievements", True, WHITE)
+    pygame.draw.rect(screen, FADED_OCHRE_YELLOW, achievements_button_rect)
+    achievements_text = font.render("Achievements", True, RED)
     screen.blit(achievements_text, achievements_text.get_rect(center=achievements_button_rect.center))
     
     pygame.display.flip()
