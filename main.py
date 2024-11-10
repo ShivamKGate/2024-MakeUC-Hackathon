@@ -10,6 +10,9 @@ from screens.shop import shop_screen
 from screens.get_started import get_started_screen
 from screens.end_game import end_game_screen
 from screens.achievements import achievements_screen  # Import achievements screen
+from fact import environmental_facts
+import random
+
 
 # Pygame initialization
 pygame.init()
@@ -23,9 +26,7 @@ pygame.display.set_caption("Cleanify")
 font = pygame.font.Font(None, 36)
 game_state = "main_menu"
 scroll_offset = 0  # Initialize scroll offset for scrollable screens
-earned_facts = ["Recycling one aluminum can save enough energy to run a TV for three hours.",
-                "The average person generates over 4 pounds of trash every day.",
-                "Approximately 1 million sea birds are killed by pollution every year."]  # Sample earned facts
+earned_facts = random.sample(environmental_facts, 3)  
 
 user_data = None
 level = None
