@@ -97,7 +97,8 @@ while True:
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                game_state = "login_menu"  # Move to level selection screen if clicked
+                game_state = "login_menu"
+                game_state = "level_selection"  # Move to level selection screen if clicked
                 # if play_button_rect.collidepoint(event.pos):
                 #     game_state = "level_selection"  # Move to level selection screen if play is clicked
                 # elif shop_button_rect.collidepoint(event.pos):
