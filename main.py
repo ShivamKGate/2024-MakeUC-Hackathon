@@ -7,7 +7,7 @@ from factsdb_manager import get_random_facts_by_level
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.level_selection import level_selection
 from screens.previous_game import previous_game_screen
-from screens.game_screen import game_screen, level_configs, check_level_completion, display_level_up_message
+from screens.game_screen import game_screen, level_configs
 from screens.shop import shop_screen
 from screens.get_started import get_started_screen
 from screens.end_game import end_game_screen
@@ -56,7 +56,9 @@ pygame.mixer.music.play(-1)
 def load_user_data():
     global user_data
     file_path = "currentUser.json"
+    
     if os.path.exists(file_path):
+        # Load data if file exists
         with open(file_path, "r") as file:
             current_user = json.load(file)
             username = current_user.get("playerName")
@@ -65,8 +67,39 @@ def load_user_data():
             else:
                 user_data = None
     else:
-        user_data = None
-
+        # Create a default createUser.json if the file does not exist
+        default_data = {
+            "_id": "",
+            "email": "",
+            "playerName": "",
+            "currentLevel": 1,
+            "highestScore": 0,
+            "currentCurrency": 0,
+            "previousGames": {
+                "level": 1,
+                "score": 0,
+                "trash_collected": 0,
+                "facts_learned": []
+            },
+            "achievements": {
+                "1": [],
+                "2": [],
+                "3": [],
+                "4": [],
+                "5": [],
+                "6": [],
+                "7": [],
+                "8": [],
+                "9": [],
+                "10": []
+            }
+        }
+        
+        # Save the default data into createUser.json
+        create_user_path = "currentUser.json"
+        with open(create_user_path, "w") as file:
+            json.dump(default_data, file, indent=4)
+        
 
 # Load user data at the start of the program
 load_user_data()
