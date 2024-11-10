@@ -65,10 +65,12 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     screen.blit(achievements_message, achievements_message_rect)
 
     # Button setup
+    achievements_button_text = font.render("Achievements", True, text_color)
     replay_button_text = font.render("Replay Level", True, text_color)
     main_menu_button_text = font.render("Level Selection", True, text_color)
     exit_button_text = font.render("Exit", True, text_color)
     
+    achievements_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 200), (200, 40))
     replay_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 150), (200, 40))
     main_menu_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 100), (200, 40))
     exit_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 50), (200, 40))
@@ -76,6 +78,13 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     # Get mouse position
     mouse_pos = pygame.mouse.get_pos()
     
+    # Draw Achievements Button with hover effect
+    if achievements_button_rect.collidepoint(mouse_pos):
+        pygame.draw.rect(screen, hover_color, achievements_button_rect)
+    else:
+        pygame.draw.rect(screen, button_color, achievements_button_rect)
+    screen.blit(achievements_button_text, achievements_button_text.get_rect(center=achievements_button_rect.center))
+
     # Draw Replay Button with hover effect
     if replay_button_rect.collidepoint(mouse_pos):
         pygame.draw.rect(screen, hover_color, replay_button_rect)
@@ -111,5 +120,7 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
                 return "level_selection", frame_index, random_facts, scroll_offset
             elif exit_button_rect.collidepoint(event.pos):
                 return "quit", frame_index, random_facts, scroll_offset
+            elif achievements_button_rect.collidepoint(event.pos):
+                return "achievements", frame_index, random_facts, scroll_offset
     
     return None, frame_index, random_facts, scroll_offset

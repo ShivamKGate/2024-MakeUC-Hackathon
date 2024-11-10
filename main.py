@@ -9,6 +9,7 @@ from screens.game_screen import game_screen, level_configs
 from screens.shop import shop_screen
 from screens.get_started import get_started_screen
 from screens.end_game import end_game_screen
+from screens.achievements import achievements_screen  # Import achievements screen
 
 # Pygame initialization
 pygame.init()
@@ -21,6 +22,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Cleanify")
 font = pygame.font.Font(None, 36)
 game_state = "main_menu"
+scroll_offset = 0  # Initialize scroll offset for scrollable screens
+earned_facts = ["Recycling one aluminum can save enough energy to run a TV for three hours.",
+                "The average person generates over 4 pounds of trash every day.",
+                "Approximately 1 million sea birds are killed by pollution every year."]  # Sample earned facts
+
 user_data = None
 level = None
 level_data = None
@@ -106,8 +112,9 @@ while running:
         game_state = "main_menu"
     
     elif game_state == "end_game":
+        # Unpack four values if end_game_screen returns four values
         action, frame_index, random_facts, scroll_offset = end_game_screen(
-            screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts
+            screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts, scroll_offset
         )
         if action == "replay":
             game_state = "game_screen"
@@ -117,17 +124,31 @@ while running:
             game_state = "main_menu"
         elif action == "quit":
             running = False
+        elif action == "achievements":
+            game_state = "achievements"  # Go to achievements screen
 
-    # Event handling
+    elif game_state == "achievements":
+        # Display achievements screen
+        result = achievements_screen(screen, font, earned_facts, SCREEN_WIDTH, SCREEN_HEIGHT, scroll_offset)
+        if result == "back":
+            game_state = "end_game"  # Return to end game screen
+    
+    # Event handling for quitting
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                game_state = "login_menu" if user_data is None else "level_selection"  # Check login status
-            elif game_state == "login_menu":
-                if result == "main_lobby":
-                    game_state = "level_selection"
+                game_state = "login_menu"  # Move to login menu on click
+            elif game_state == "login_menu" and result == "main_lobby":
+                game_state = "level_selection"
+            elif game_state == "end_game":
+                # Additional event handling for end game screen if needed
+                pass
 
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(30)  # Control frame rate
+
+# Quit Pygame after loop
+pygame.quit()
+sys.exit()
