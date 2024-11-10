@@ -2,6 +2,7 @@ import json
 import os
 import pygame
 import math
+from db_manager import get_current_level
 
 # Initialize Pygame and font module
 pygame.init()
@@ -41,22 +42,19 @@ def init_background():
 # Function to update currentUser.json on logout
 def update_current_user():
     file_path = "currentUser.json"
-    default_user_data = {"username": "", "email": "", "currentLevel": 0}
+    default_user_data = {"playerName": "", "email": "", "currentLevel": 0}
     with open(file_path, "w") as file:
         json.dump(default_user_data, file)
     print("User logged out, currentUser.json updated.")
 
 # Function to draw a simple candy button
-def draw_candy_button(screen, level_num, position):
-    candy_width = 35
-    candy_height = 30
-    candy_rect = pygame.Rect(position[0] - candy_width // 2, position[1] - candy_height // 2, candy_width, candy_height)
-    pygame.draw.ellipse(screen, FADED_OCHRE_YELLOW, candy_rect)
-    pygame.draw.ellipse(screen, RED, (position[0] - candy_width // 2 - 10, position[1] - 5, 10, 5))
-    pygame.draw.ellipse(screen, RED, (position[0] + candy_width // 2, position[1] - 5, 10, 5))
-    text = font.render(str(level_num), True, RED)
+def draw_candy_button(screen, level_num, position, enabled=True):
+    color = FADED_OCHRE_YELLOW if enabled else (200, 200, 200)  # Duller color for disabled levels
+    pygame.draw.ellipse(screen, color, pygame.Rect(position[0] - 20, position[1] - 15, 40, 30))
+    text_color = RED if enabled else (150, 150, 150)  # Duller text color if disabled
+    text = font.render(str(level_num), True, text_color)
     screen.blit(text, text.get_rect(center=position))
-    return candy_rect  # Return the rectangle for click detection
+
 
 # Draw the logout button
 def draw_logout_button(screen):
@@ -105,10 +103,14 @@ def level_selection(screen, user_data):
         init_background()  # Initialize the background if not already done
 
     screen.blit(background_image, (0, 0))
+    current_level = get_current_level(user_data["playerName"])
+    print(f"Current level selected to {current_level}")
     level_buttons = []
     for i, pos in enumerate(level_positions):
-        button_rect = draw_candy_button(screen, i + 1, pos)
-        level_buttons.append((button_rect, i + 1))
+        enabled = (i + 1) <= current_level  # Enable only up to the current level
+        draw_candy_button(screen, i + 1, pos, enabled)
+        button_rect = pygame.Rect(pos[0] - 20, pos[1] - 15, 40, 30)  # Create the button rect for click detection
+        level_buttons.append((button_rect, i + 1, enabled))  # Store button rect, level number, and enabled state
 
     logout_button_rect = draw_logout_button(screen)
     menu_button_rect = draw_menu_button(screen)
@@ -140,8 +142,8 @@ def level_selection(screen, user_data):
 
         # Draw level buttons and other elements when not in menu
         screen.blit(background_image, (0, 0))
-        for button_rect, level_num in level_buttons:
-            draw_candy_button(screen, level_num, level_positions[level_num - 1])
+        for button_rect, level_num, enabled in level_buttons:
+            draw_candy_button(screen, level_num, level_positions[level_num - 1], enabled)
         draw_logout_button(screen)
         draw_menu_button(screen)
         draw_welcome_message(screen, user_data["playerName"] if user_data else "Player")
@@ -157,8 +159,8 @@ def level_selection(screen, user_data):
                     return "logout"
                 if menu_button_rect.collidepoint(mouse_pos):
                     in_menu = True
-                for button_rect, level_num in level_buttons:
-                    if button_rect.collidepoint(mouse_pos):
-                        return level_num  # Return selected level number for main loop
+                for button_rect, level_num, enabled in level_buttons:
+                    if enabled and button_rect.collidepoint(mouse_pos):  # Only allow clicks on enabled levels
+                        return level_num
 
         pygame.display.flip()

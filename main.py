@@ -2,10 +2,10 @@ import pygame
 import sys
 import os
 import json
-from db_manager import fetch_user  # Assuming fetch_user(email) retrieves user from DB
+from db_manager import fetch_user, update_current_level, get_current_level # Assuming fetch_user(email) retrieves user from DB
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.level_selection import level_selection
-from screens.game_screen import game_screen, level_configs
+from screens.game_screen import game_screen, level_configs, check_level_completion, display_level_up_message
 from screens.shop import shop_screen
 from screens.get_started import get_started_screen
 from screens.end_game import end_game_screen
@@ -48,19 +48,23 @@ pygame.mixer.music.load(bgm_path)
 pygame.mixer.music.play(-1)
 
 # Function to load user data from currentUser.json
+# main.py
+
 def load_user_data():
     global user_data
-    file_path = "./currentUser.json"
+    file_path = "currentUser.json"
     if os.path.exists(file_path):
         with open(file_path, "r") as file:
             current_user = json.load(file)
-            username = current_user.get("username")
+            username = current_user.get("playerName")
             if username:
-                user_data = fetch_user(username)  # Assuming fetch_user fetches user data from the database
+                user_data = fetch_user(username)
+                user_data["currentLevel"] = get_current_level(username)  # Add current level
             else:
                 user_data = None
     else:
         user_data = None
+
 
 # Load user data at the start of the program
 load_user_data()
@@ -104,13 +108,19 @@ while running:
                 game_state = "game_screen"
     
     elif game_state == "game_screen" and level_data is not None:
-        action = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
+        score, action = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level, user_data)
+        # Check if player leveled up after game completion
         if action == "restart":
-            # continue  # Restart current level
             game_state = "game_screen"
         elif action == "home":
             game_state = "level_selection"
         elif action == "end_game":
+            print("User Name: " + user_data["playerName"])
+            print("current level: " + str(user_data["currentLevel"]))
+            print("Score: " + str(score))
+            if check_level_completion(user_data["playerName"], score):
+                display_level_up_message(user_data["playerName"], screen)  # Show level-up message
+                # user_data["currentLevel"] += 1  # Update local level after successful DB update
             game_state = "end_game"
     
     elif game_state == "shop":

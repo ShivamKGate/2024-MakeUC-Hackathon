@@ -159,7 +159,7 @@ def get_started_screen(screen):
                     user = login_user(email_box_login.text, password_box_login.text)
                     if user:
                         user_data = {
-                            "username": user["playerName"],
+                            "playerName": user["playerName"],
                             "email": user["email"],
                             "currentLevel": user["currentLevel"]
                         }

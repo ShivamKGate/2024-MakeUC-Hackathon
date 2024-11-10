@@ -1,7 +1,17 @@
 import pygame
 import random
 import time
+import json
+from db_manager import update_current_level, get_current_level
 pygame.mixer.init()
+
+FADED_OCHRE_YELLOW = (245, 222, 179)  # Faded ochre yellow for shadow
+RED = (255, 0, 0)  # Red for main text
+bold_font = pygame.font.Font(None, 48)
+bold_font.set_bold(True)
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 # Load sounds
 pickup_file = "./assets/sounds/retro-coin-4-236671.mp3"
@@ -11,16 +21,16 @@ end_sound = pygame.mixer.Sound(end_file)
 
 # Define level configurations without player_speed
 level_configs = {
-    1: {"background": "assets/images/background/city_view.png", "initial_trash": 10, "respawn_threshold": 3, "respawn_amount": 5, "time_limit": 60, "storage_limit": 10},
-    2: {"background": "assets/images/background/dark_forest.png", "initial_trash": 15, "respawn_threshold": 5, "respawn_amount": 6, "time_limit": 55, "storage_limit": 12},
-    3: {"background": "assets/images/background/day_rooftop (2).png", "initial_trash": 20, "respawn_threshold": 7, "respawn_amount": 7, "time_limit": 50, "storage_limit": 15},
-    4: {"background": "assets/images/background/hospital.png", "initial_trash": 25, "respawn_threshold": 9, "respawn_amount": 8, "time_limit": 45, "storage_limit": 18},
-    5: {"background": "assets/images/background/market_place (2).png", "initial_trash": 30, "respawn_threshold": 11, "respawn_amount": 9, "time_limit": 40, "storage_limit": 20},
-    6: {"background": "assets/images/background/school.png", "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 35, "storage_limit": 22},
-    7: {"background": "assets/images/background/night_view.png", "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
-    8: {"background": "assets/images/background/living_room.png", "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 25, "storage_limit": 28},
-    9: {"background": "assets/images/background/snow.png", "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 20, "storage_limit": 30},
-    10: {"background": "assets/images/background/dayforest.png", "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 3, "storage_limit": 32}
+    1: {"background": "assets/images/background/city_view.png", "initial_trash": 10, "respawn_threshold": 3, "respawn_amount": 5, "time_limit": 10, "storage_limit": 10},
+    2: {"background": "assets/images/background/dark_forest.png", "initial_trash": 15, "respawn_threshold": 5, "respawn_amount": 6, "time_limit": 10, "storage_limit": 12},
+    3: {"background": "assets/images/background/day_rooftop (2).png", "initial_trash": 20, "respawn_threshold": 7, "respawn_amount": 7, "time_limit": 10, "storage_limit": 15},
+    4: {"background": "assets/images/background/hospital.png", "initial_trash": 25, "respawn_threshold": 9, "respawn_amount": 8, "time_limit": 5, "storage_limit": 18},
+    5: {"background": "assets/images/background/market_place (2).png", "initial_trash": 30, "respawn_threshold": 11, "respawn_amount": 9, "time_limit": 10, "storage_limit": 20},
+    6: {"background": "assets/images/background/school.png", "initial_trash": 35, "respawn_threshold": 13, "respawn_amount": 10, "time_limit": 5, "storage_limit": 22},
+    7: {"background": "assets/images/background/night_view.png", "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 15, "storage_limit": 25},
+    8: {"background": "assets/images/background/living_room.png", "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 5, "storage_limit": 28},
+    9: {"background": "assets/images/background/snow.png", "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 15, "storage_limit": 30},
+    10: {"background": "assets/images/background/dayforest.png", "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 5, "storage_limit": 32}
 }
 
 # Draw the pause button in the top right corner
@@ -47,8 +57,28 @@ def pause_menu(screen, font):
     pygame.display.flip()
     return button_rects
 
+def check_level_completion(username, score, score_threshold=50):
+    """Check if player has met score threshold to advance levels."""
+    current_level = get_current_level(username)
+    if score >= score_threshold and update_current_level(username, current_level + 1):
+        with open("currentUser.json", "w") as file:
+            json.dump({"playerName": username, "currentLevel": current_level + 1}, file)
+        return True
+    return False
+
+def display_level_up_message(username, screen):
+    level_up_text = bold_font.render(f"Level Up!\n{get_current_level(username)}", True, RED)
+    shadow_text = bold_font.render("Level Up!", True, FADED_OCHRE_YELLOW)
+    shadow_rect = shadow_text.get_rect(center=(SCREEN_WIDTH // 2 + 3, SCREEN_HEIGHT // 2 + 3))
+    text_rect = level_up_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+    screen.blit(shadow_text, shadow_rect)
+    screen.blit(level_up_text, text_rect)
+    pygame.display.flip()
+    pygame.time.delay(2000)  # Display for 2 seconds
+
+
 # Game screen function with pause functionality
-def game_screen(screen, font, player_image, middle_trash_image, trash_image, screen_width, screen_height, level_data, level):
+def game_screen(screen, font, player_image, middle_trash_image, trash_image, screen_width, screen_height, level_data, level, user_data):
     # Load background and scale images
     background = pygame.image.load(level_data["background"])
     background = pygame.transform.scale(background, (screen_width, screen_height))
@@ -166,5 +196,6 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
                 storage, streak, multiplier = 0, 0, 1
 
         pygame.display.flip()
-
-    return "end_game"  # Default return when the game ends
+    if check_level_completion(user_data["playerName"], user_data["currentLevel"], score):
+        display_level_up_message(user_data["playerName"], screen)  # Show level-up message
+    return score, "end_game"  # Default return when the game ends

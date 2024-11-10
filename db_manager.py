@@ -52,3 +52,18 @@ def fetch_user(identifier):
     query = {"$or": [{"email": identifier}, {"playerName": identifier}]}
     user = login_data_collection.find_one(query)
     return user
+
+def get_current_level(username):
+    """Fetch the current level of the user."""
+    user = login_data_collection.find_one({"playerName": username})
+    if user:
+        return user.get("currentLevel", 1)
+    return 1  # Default level if not found
+
+def update_current_level(player_name, new_level):
+    try:
+        result = login_data_collection.update_one({"playerName": player_name}, {"$set": {"currentLevel": new_level}})
+        return result.modified_count > 0  # Returns True if the update was successful
+    except Exception as e:
+        print(f"Failed to update level: {e}")
+        return False
