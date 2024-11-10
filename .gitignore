@@ -3,3 +3,4 @@ myEnv
 env
 virtualEnvironment
 .env
+__pycache__
