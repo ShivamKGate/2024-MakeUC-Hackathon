@@ -40,8 +40,7 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
 
     screen.fill((255, 255, 255))  # Set background color
     screen.blit(background_image, (0, 0))
-    
-    
+
     # Cycle through GIF frames
     frame_index = (frame_index + 1) % len(frames)
     
@@ -60,38 +59,10 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     screen.blit(end_text, end_text_rect)
     screen.blit(currency_text, currency_text_rect)
 
-    # Scroll box area
-    # Define the scroll box rectangle
-    scroll_box_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 150, 400, 250)
-
-    # Create a transparent surface
-    scroll_box_surface = pygame.Surface((scroll_box_rect.width, scroll_box_rect.height), pygame.SRCALPHA)
-
-    # Fill the surface with transparency (alpha channel set to 0)
-    scroll_box_surface.fill((0, 0, 0, 0))  # The last value '0' indicates full transparency
-
-    # Blit the transparent surface to the main screen at the position of the scroll box
-    screen.blit(scroll_box_surface, scroll_box_rect.topleft)
-
-    # Draw the border around the scroll box (black)
-    pygame.draw.rect(screen, (0, 0, 0), scroll_box_rect, 2)  # Border around scroll box for clarity
-
-
-    # Render the facts in the scrollable area
-    y_offset = scroll_box_rect.top - scroll_offset + 10  # Starting position within the scroll area with padding
-    line_height = 24  # Height of each line of text
-
-    for fact in random_facts:
-        wrapped_lines = wrap_text(fact, font, scroll_box_rect.width - 20)  # Wrap each fact to fit within the scroll box
-        for line in wrapped_lines:
-            fact_text = font.render(line, True, text_color)
-            fact_text_rect = fact_text.get_rect(midtop=(SCREEN_WIDTH // 2, y_offset))
-            
-            # Only blit the fact if it's within the scrollable area
-            if scroll_box_rect.top <= fact_text_rect.bottom <= scroll_box_rect.bottom:
-                screen.blit(fact_text, fact_text_rect)
-            
-            y_offset += line_height  # Adjust vertical spacing between lines
+    # Display the message directing the player to the achievements page
+    achievements_message = font.render("Go to Achievements Page to unlock your achievements or prizes!", True, text_color)
+    achievements_message_rect = achievements_message.get_rect(center=(SCREEN_WIDTH // 2, 200))
+    screen.blit(achievements_message, achievements_message_rect)
 
     # Button setup
     replay_button_text = font.render("Replay Level", True, text_color)
@@ -128,8 +99,7 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     
     pygame.display.flip()  # Update the display
 
-    # Handle scrolling events
-    max_scroll_offset = max(0, y_offset - scroll_box_rect.bottom)  # Calculate max scroll limit
+    # Handle button click events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -141,12 +111,5 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
                 return "level_selection", frame_index, random_facts, scroll_offset
             elif exit_button_rect.collidepoint(event.pos):
                 return "quit", frame_index, random_facts, scroll_offset
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN:
-                scroll_offset = min(scroll_offset + 20, max_scroll_offset)
-            elif event.key == pygame.K_UP:
-                scroll_offset = max(scroll_offset - 20, 0)
-        elif event.type == pygame.MOUSEWHEEL:
-            scroll_offset = max(0, min(scroll_offset - event.y * 20, max_scroll_offset))
     
     return None, frame_index, random_facts, scroll_offset
