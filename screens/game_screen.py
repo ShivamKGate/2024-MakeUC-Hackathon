@@ -20,7 +20,7 @@ level_configs = {
     7: {"background": "assets/images/background/night_view.png", "initial_trash": 40, "respawn_threshold": 15, "respawn_amount": 11, "time_limit": 30, "storage_limit": 25},
     8: {"background": "assets/images/background/living_room.png", "initial_trash": 45, "respawn_threshold": 17, "respawn_amount": 12, "time_limit": 25, "storage_limit": 28},
     9: {"background": "assets/images/background/snow.png", "initial_trash": 50, "respawn_threshold": 19, "respawn_amount": 13, "time_limit": 20, "storage_limit": 30},
-    10: {"background": "assets/images/background/dayforest.png", "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 15, "storage_limit": 32}
+    10: {"background": "assets/images/background/dayforest.png", "initial_trash": 55, "respawn_threshold": 21, "respawn_amount": 14, "time_limit": 5, "storage_limit": 32}
 }
 
 # Game screen function for each level

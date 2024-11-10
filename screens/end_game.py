@@ -30,14 +30,17 @@ def select_random_facts():
     return random.sample(environmental_facts, 10)
 
 def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts=None, scroll_offset=0):
+    # Load background image
+    background_image = pygame.image.load("assets/images/trashpickup.jpg")
+    background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
     if random_facts is None:
         # Select 10 random facts only once
         random_facts = select_random_facts()
 
     screen.fill((255, 255, 255))  # Set background color
+    screen.blit(background_image, (0, 0))
     
-    # Display the current GIF frame
-    screen.blit(frames[frame_index], (0, 0))  # Adjust position as needed
     
     # Cycle through GIF frames
     frame_index = (frame_index + 1) % len(frames)
@@ -58,9 +61,21 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     screen.blit(currency_text, currency_text_rect)
 
     # Scroll box area
+    # Define the scroll box rectangle
     scroll_box_rect = pygame.Rect(SCREEN_WIDTH // 2 - 200, 150, 400, 250)
-    pygame.draw.rect(screen, (255, 255, 255), scroll_box_rect)  # Draw white background for scroll area
+
+    # Create a transparent surface
+    scroll_box_surface = pygame.Surface((scroll_box_rect.width, scroll_box_rect.height), pygame.SRCALPHA)
+
+    # Fill the surface with transparency (alpha channel set to 0)
+    scroll_box_surface.fill((0, 0, 0, 0))  # The last value '0' indicates full transparency
+
+    # Blit the transparent surface to the main screen at the position of the scroll box
+    screen.blit(scroll_box_surface, scroll_box_rect.topleft)
+
+    # Draw the border around the scroll box (black)
     pygame.draw.rect(screen, (0, 0, 0), scroll_box_rect, 2)  # Border around scroll box for clarity
+
 
     # Render the facts in the scrollable area
     y_offset = scroll_box_rect.top - scroll_offset + 10  # Starting position within the scroll area with padding
@@ -83,9 +98,9 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     main_menu_button_text = font.render("Level Selection", True, text_color)
     exit_button_text = font.render("Exit", True, text_color)
     
-    replay_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 130), (200, 40))
-    main_menu_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 80), (200, 40))
-    exit_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 30), (200, 40))
+    replay_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 150), (200, 40))
+    main_menu_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 100), (200, 40))
+    exit_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 50), (200, 40))
     
     # Get mouse position
     mouse_pos = pygame.mouse.get_pos()
