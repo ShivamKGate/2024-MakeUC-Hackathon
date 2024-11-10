@@ -105,14 +105,9 @@ while running:
         game_state = "main_menu"
     
     elif game_state == "end_game":
-<<<<<<< HEAD
         # Unpack four values if end_game_screen returns four values
         action, frame_index, random_facts, scroll_offset = end_game_screen(
             screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts, scroll_offset
-=======
-        action, frame_index, random_facts, scroll_offset = end_game_screen(
-            screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts
->>>>>>> 64d6b48d29f129c2b191c705a4a40aabc9a31100
         )
         if action == "replay":
             game_state = "game_screen"
