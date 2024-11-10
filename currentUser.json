@@ -1,26 +1,16 @@
 {
-    "_id": "",
-    "email": "",
-    "playerName": "",
+    "_id": "6730d00f5ae572bd99161c35",
+    "email": "1212",
+    "playerName": "12",
     "currentLevel": 1,
     "highestScore": 0,
-    "currentCurrency": 0,
-    "previousGames": {
-        "level": 1,
-        "score": 0,
-        "trash_collected": 0,
-        "facts_learned": []
-    },
+    "currentCurrency": 9950,
+    "previousGames": {},
+    "Achievements": [],
     "achievements": {
-        "1": [],
-        "2": [],
-        "3": [],
-        "4": [],
-        "5": [],
-        "6": [],
-        "7": [],
-        "8": [],
-        "9": [],
-        "10": []
+        "2": [
+            "Swapping lawn mowers for native plants reduces maintenance and provides wildlife habitat.",
+            "Every ton of newspaper recycled can save enough energy to power a home for six months."
+        ]
     }
 }

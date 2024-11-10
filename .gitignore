@@ -1,6 +1,7 @@
 # Virtual Environment folders
 myEnv/
 env/
+venv/
 virtualEnvironment/
 .env/
 
