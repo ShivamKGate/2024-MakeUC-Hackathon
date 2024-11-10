@@ -3,6 +3,9 @@ from db_manager import purchase_item, update_currency
 import time
 from db_manager import generate_and_save_facts
 
+# Initialize Pygame and Pygame Mixer
+pygame.init()
+pygame.mixer.init()
 
 # Colors
 FADED_OCHRE_YELLOW = (245, 222, 179)
@@ -120,6 +123,11 @@ def shop_screen(screen, font, currency, user_data):
 
                             # Generate and save facts as achievements
                             generated_facts = generate_and_save_facts(user_data["playerName"], num_facts)
+
+                            # Load sound for purchase confirmation
+                            purchase_sound = pygame.mixer.Sound("assets/sounds/coin-spill-105867.mp3")
+                            purchase_sound.play()
+
 
                             # Show purchase confirmation
                             show_purchase_confirmation(screen, font, item["name"])

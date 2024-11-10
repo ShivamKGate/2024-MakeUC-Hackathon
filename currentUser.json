@@ -1,10 +1,16 @@
 {
-    "_id": "6730cf07217ae3c31b9a7b33",
-    "email": "123@gmail.com",
-    "playerName": "123",
+    "_id": "6730d00f5ae572bd99161c35",
+    "email": "1212",
+    "playerName": "12",
     "currentLevel": 1,
     "highestScore": 0,
-    "currentCurrency": 0,
+    "currentCurrency": 9950,
     "previousGames": {},
-    "Achievements": []
+    "Achievements": [],
+    "achievements": {
+        "2": [
+            "Swapping lawn mowers for native plants reduces maintenance and provides wildlife habitat.",
+            "Every ton of newspaper recycled can save enough energy to power a home for six months."
+        ]
+    }
 }
