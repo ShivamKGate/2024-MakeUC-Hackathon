@@ -1,6 +1,11 @@
-venv
-myEnv
-env
-virtualEnvironment
-.env
-__pycache__
+# Virtual Environment folders
+myEnv/
+env/
+virtualEnvironment/
+.env/
+
+# Python cache files
+__pycache__/
+
+# Specific JSON file
+currentUser.json

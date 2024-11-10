@@ -1,29 +1,26 @@
 {
-    "_id": "6730981847dfa5f6f7c9fa9e",
-    "email": "12",
-    "playerName": "Test",
-    "currentLevel": 2,
+    "_id": "",
+    "email": "",
+    "playerName": "",
+    "currentLevel": 1,
     "highestScore": 0,
-    "currentCurrency": 15099900,
+    "currentCurrency": 0,
     "previousGames": {
         "level": 1,
-        "score": 57,
-        "trash_collected": 15,
-        "facts_learned": [
-            "Using a reusable coffee cup instead of disposable ones can save hundreds of cups from landfills every year.",
-            "Composting food waste reduces methane emissions from landfills and produces natural fertilizer.",
-            "A single reusable straw can replace hundreds of disposable plastic straws over its lifetime."
-        ]
+        "score": 0,
+        "trash_collected": 0,
+        "facts_learned": []
     },
-    "Achievements": [],
     "achievements": {
-        "1": [
-            "Using a reusable coffee cup instead of disposable ones can save hundreds of cups from landfills every year.",
-            "Composting food waste reduces methane emissions from landfills and produces natural fertilizer.",
-            "A single reusable straw can replace hundreds of disposable plastic straws over its lifetime.",
-            "Using a ceiling fan instead of air conditioning can save a lot of energy in warmer months.",
-            "One meatless meal per week can save the energy equivalent of driving 1,160 miles per year.",
-            "Reducing thermostat settings by 1\u00b0F in winter can save 1% on heating bills."
-        ]
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": [],
+        "6": [],
+        "7": [],
+        "8": [],
+        "9": [],
+        "10": []
     }
 }
