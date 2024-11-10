@@ -1,6 +1,8 @@
 import pygame
 from db_manager import purchase_item, update_currency
 import time
+from db_manager import generate_and_save_facts
+
 
 # Colors
 FADED_OCHRE_YELLOW = (245, 222, 179)
@@ -103,9 +105,24 @@ def shop_screen(screen, font, currency, user_data):
                             # Purchase the item
                             purchase_item(user_data["playerName"], item["price"])
                             user_data["currentCurrency"] -= item["price"]
-                            # update_currency(user_data["playerName"], -item["price"])  # Update currency in DB
-                            show_purchase_confirmation(screen, font, item["name"])  # Show purchase confirmation
-                            return -101010101
+                            
+                            # Determine the number of facts based on the item's description
+                            if "2-Environmental Facts" in item["name"]:
+                                num_facts = 2
+                            elif "5-Environmental Facts" in item["name"]:
+                                num_facts = 5
+                            elif "10-Environmental Facts" in item["name"]:
+                                num_facts = 10
+                            elif "8-Environmental Facts" in item["name"]:
+                                num_facts = 8
+                            else:
+                                num_facts = 1  # Default fallback
+
+                            # Generate and save facts as achievements
+                            generated_facts = generate_and_save_facts(user_data["playerName"], num_facts)
+
+                            # Show purchase confirmation
+                            show_purchase_confirmation(screen, font, item["name"])
 
                             # Update displayed currency after purchase
                             currency_text = font.render(f"Your Currency: {user_data['currentCurrency']}", True, (0, 128, 0))
@@ -115,7 +132,8 @@ def shop_screen(screen, font, currency, user_data):
                             for rect, item in item_rects:
                                 pygame.draw.rect(screen, FADED_OCHRE_YELLOW, rect)  # Redraw item backgrounds
                             screen.blit(exit_text, exit_text.get_rect(center=exit_button_rect.center))
+
+                            return -101010101  # Exit after successful purchase and fact generation
                         else:
-                            # Not enough currency
                             print("Not enough currency!")
         pygame.display.flip()

@@ -1,7 +1,9 @@
 import bcrypt
+import random
 import json
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from factsdb_manager import get_random_facts_by_level
 from dotenv import load_dotenv
 import os
 
@@ -150,3 +152,34 @@ def add_achievements(player_name, level, facts):
         print(f"Successfully added achievements for level {level}")
     except Exception as e:
         print(f"Error updating achievements: {e}")
+
+def generate_and_save_facts(player_name, num_facts):
+    """
+    Generate random environmental facts for a random level and save them as achievements.
+    
+    :param player_name: The name of the player
+    :param num_facts: The number of facts to generate
+    :return: A list of facts generated for this purchase
+    """
+    # Generate a random level between 1 and 10
+    random_level = random.randint(1, 10)
+    
+    # Get the specified number of random facts for that level
+    random_facts = get_random_facts_by_level(random_level)[:num_facts]
+    
+    # Save the facts as achievements in the database
+    add_achievements(player_name, random_level, random_facts)
+    
+    return random_facts
+
+def get_previous_game(player_name):
+    """
+    Fetches the last game stats for the specified player.
+    :param player_name: The player's name.
+    :return: Dictionary containing the last game details or None if not found.
+    """
+    user = login_data_collection.find_one({"playerName": player_name})
+    if user and "previousGames" in user and user["previousGames"]:
+        # Return the most recent game from the previousGames array
+        return user["previousGames"]
+    return None

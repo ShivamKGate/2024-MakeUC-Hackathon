@@ -2,10 +2,11 @@ import pygame
 import sys
 import os
 import json
-from db_manager import fetch_user, update_current_level, get_current_level, get_currency, fetch_user_data, add_achievements, save_last_game # Assuming fetch_user(email) retrieves user from DB
+from db_manager import fetch_user, update_current_level, get_current_level, get_currency, fetch_user_data, add_achievements, save_last_game, get_previous_game # Assuming fetch_user(email) retrieves user from DB
 from factsdb_manager import get_random_facts_by_level
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.level_selection import level_selection
+from screens.previous_game import previous_game_screen
 from screens.game_screen import game_screen, level_configs, check_level_completion, display_level_up_message
 from screens.shop import shop_screen
 from screens.get_started import get_started_screen
@@ -107,6 +108,9 @@ while running:
         elif selected_action == "shop":
             load_user_data()
             game_state = "shop"
+        elif selected_action == "previous_game":
+            load_user_data()
+            game_state = "previous_game"
         elif selected_action == "achievements":
             load_user_data()
             game_state = "achievements"
@@ -117,6 +121,17 @@ while running:
             if level_data:
                 game_state = "game_screen"
     
+    elif game_state == "previous_game":
+        # Fetch the previous game data
+        game_data = get_previous_game(user_data["playerName"])
+        if game_data:
+            action = previous_game_screen(screen, font, game_data, SCREEN_WIDTH, SCREEN_HEIGHT, user_data)
+            if action == "back":
+                game_state = "achievements"  # Return to achievements screen
+        else:
+            print("No previous game data available.")
+            game_state = "level_selection"  # Return to achievements if no previous game found
+
     elif game_state == "game_screen" and level_data is not None:
         load_user_data()
         result = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level, user_data)

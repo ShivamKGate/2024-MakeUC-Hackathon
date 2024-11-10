@@ -97,7 +97,7 @@ def draw_welcome_message(screen, player_name):
 
 # Display the menu with options
 def display_menu(screen):
-    menu_options = ["Back", "Shop", "Unlocked Facts", "Quit"]
+    menu_options = ["Back", "Shop", "Unlocked Facts", "Previous Game", "Quit"]
     button_rects = []
     for i, option in enumerate(menu_options):
         button_rect = pygame.Rect(SCREEN_WIDTH // 2 - 60, 150 + i * 70, 200, 50)
@@ -143,6 +143,8 @@ def level_selection(screen, user_data):
                                 in_menu = False
                             elif option == "Shop":
                                 return "shop"
+                            elif option == "Previous Game":
+                                return "previous_game"
                             elif option == "Unlocked Facts":
                                 return "achievements"
                             elif option == "Quit":

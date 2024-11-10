@@ -9,6 +9,9 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 DARK_BACKGROUND = (30, 30, 30)
 
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
 # Function to display level-specific facts
 def display_level_facts(screen, font, level, facts, screen_width, screen_height):
     # Background color
@@ -102,7 +105,8 @@ def achievements_screen(screen, font, earned_facts, screen_width, screen_height,
                     if button_rect.collidepoint(mouse_pos):
                         # Fetch the level-specific facts from the user's achievements
                         facts = achievements_data.get(str(level), ["No facts earned at this level yet."])
-                        display_level_facts(screen, font, level, facts, screen_width, screen_height)
-                        break  # Return to the main achievements screen after displaying facts
+                        action = display_level_facts(screen, font, level, facts, SCREEN_WIDTH, SCREEN_HEIGHT)
+                        if action == "back":
+                            return "back"
 
         pygame.display.flip()
