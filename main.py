@@ -1,6 +1,8 @@
 import pygame
 import sys
 import os
+import json
+from db_manager import fetch_user  # Assuming fetch_user(email) retrieves user from DB
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.level_selection import level_selection
 from screens.game_screen import game_screen, level_configs
@@ -38,6 +40,25 @@ bgm_path = os.path.join("assets", "sounds", "energetic-bgm-242515.mp3")
 pygame.mixer.music.load(bgm_path)
 pygame.mixer.music.play(-1)
 
+# Function to load user data from currentUser.json
+def load_user_data():
+    global user_data
+    file_path = "currentUser.json"
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
+            current_user = json.load(file)
+            username = current_user.get("username")
+            if username:
+                user_data = fetch_user(username)  # Assuming fetch_user fetches user data from the database
+                print(f"User '{username}' logged in.")
+            else:
+                user_data = None
+    else:
+        user_data = None
+
+# Load user data at the start of the program
+load_user_data()
+
 # Main game loop variables for main menu animation
 frame_index = 0
 clock = pygame.time.Clock()
@@ -50,7 +71,7 @@ while running:
     
     # Main menu and game state handling
     if game_state == "main_menu":
-        frame_index = main_menu_screen(screen, frames, frame_index)
+        frame_index = main_menu_screen(screen, frames, frame_index, user_data)  # Pass user_data to main menu
         pygame.display.flip()
         clock.tick(10)
     
@@ -78,10 +99,9 @@ while running:
         game_state = "main_menu"
     
     elif game_state == "end_game":
-# Unpack four values if end_game_screen returns four values
         action, frame_index, random_facts, scroll_offset = end_game_screen(
-    screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts
-)
+            screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts
+        )
         if action == "replay":
             game_state = "game_screen"
         elif action == "level_selection":
@@ -97,15 +117,10 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                game_state = "login_menu"  # Move to login menu on click
-                game_state = "level_selection"
+                game_state = "login_menu" if user_data is None else "level_selection"  # Check login status
             elif game_state == "login_menu":
                 if result == "main_lobby":
                     game_state = "level_selection"
-            elif game_state == "end_game":
-                # Additional event handling can go here if needed in the future
-                pass
 
     pygame.display.flip()
-    clock.tick(30)  # Control frame rate
-
+    clock.tick(60)

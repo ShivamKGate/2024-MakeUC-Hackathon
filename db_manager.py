@@ -1,4 +1,3 @@
-# db_manager.py
 import bcrypt
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -42,3 +41,14 @@ def save_game_session(email, score, trash_collected, level):
         "level": level
     }
     login_data_collection.update_one({"email": email}, {"$push": {"previousGames": session_data}})
+
+# New function to fetch user data by email or player name
+def fetch_user(identifier):
+    """
+    Fetch user data from the database by email or playerName.
+    :param identifier: The user's email or playerName to fetch data.
+    :return: The user document or None if not found.
+    """
+    query = {"$or": [{"email": identifier}, {"playerName": identifier}]}
+    user = login_data_collection.find_one(query)
+    return user

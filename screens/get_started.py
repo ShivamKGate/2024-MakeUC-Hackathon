@@ -2,13 +2,16 @@
 import pygame
 import os
 import sys
+import json
 from db_manager import create_user, login_user
+
+pygame.key.set_repeat(300, 50)
 
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
-DULL_RED = (200, 50, 50)  # Dull version of red for disabled buttons
+DULL_RED = (200, 50, 50)
 ORANGE = (255, 165, 0)
 GREEN = (144, 238, 144)
 
@@ -49,6 +52,11 @@ class InputBox:
 
     def is_filled(self):
         return bool(self.text)
+
+# Function to save user data to `currentUser.json`
+def save_user_data(user_data):
+    with open("currentUser.json", "w") as file:
+        json.dump(user_data, file)
 
 # Function to handle login/signup screen
 def get_started_screen(screen):
@@ -150,6 +158,12 @@ def get_started_screen(screen):
                 if current_page == "login" and login_button.collidepoint(event.pos) and email_box_login.is_filled() and password_box_login.is_filled():
                     user = login_user(email_box_login.text, password_box_login.text)
                     if user:
+                        user_data = {
+                            "username": user["playerName"],
+                            "email": user["email"],
+                            "currentLevel": user["currentLevel"]
+                        }
+                        save_user_data(user_data)  # Save or update `currentUser.json`
                         return "main_lobby"  # Move to main lobby on successful login
                     else:
                         error_message = "Invalid email or password!"
@@ -170,6 +184,7 @@ def get_started_screen(screen):
                 if toggle_rect.collidepoint(event.pos):
                     target_offset = SCREEN_WIDTH if current_page == "login" else 0
                     current_page = "signup" if current_page == "login" else "login"
+                    transitioning = True
 
         pygame.display.flip()
 
