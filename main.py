@@ -12,6 +12,7 @@ from screens.shop import shop_screen
 from screens.get_started import get_started_screen
 from screens.end_game import end_game_screen
 from screens.achievements import achievements_screen  # Import achievements screen
+from fact import environmental_facts
 import random
 
 
