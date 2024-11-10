@@ -2,8 +2,10 @@ import pygame
 import sys
 import os
 from screens.main_menu import main_menu_screen, load_and_resize_gif
-from screens.game_screen import game_screen, level_selection
+from screens.game_screen import game_screen
 from screens.game_screen import level_configs
+from screens.level_selection import level_selection
+
 from screens.shop import shop_screen
 
 # Pygame initialization
@@ -53,8 +55,13 @@ while True:
     
     elif game_state == "level_selection":
         # Level selection screen
-        level = level_selection(screen, font)
-        level_data = level_configs.get(level)  # Retrieve configuration for the selected level
+        # Call the level selection screen and handle level selection
+        selected_level = level_selection(screen)
+        if selected_level == "quit":
+            running = False  # Quit the game if the quit event was received
+        elif selected_level is not None:
+            print(f"Starting Level {selected_level}")
+        level_data = level_configs.get(selected_level)  # Retrieve configuration for the selected level
         if level_data:  # Ensure level_data is valid
             game_state = "game_screen"  # Move to game screen after selection
 
