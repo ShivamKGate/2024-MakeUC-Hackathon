@@ -1,3 +1,5 @@
+import json
+import os
 import pygame
 import math
 
@@ -34,6 +36,14 @@ def init_background():
     background_image = pygame.image.load(background_image_path)
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
+# Function to update currentUser.json on logout
+def update_current_user():
+    file_path = "currentUser.json"
+    default_user_data = {"username": "", "email": "", "currentLevel": 0}
+    with open(file_path, "w") as file:
+        json.dump(default_user_data, file)
+    print("User logged out, currentUser.json updated.")
+
 # Function to draw a simple candy button
 def draw_candy_button(screen, level_num, position):
     # Candy body size and position
@@ -47,13 +57,11 @@ def draw_candy_button(screen, level_num, position):
     # Draw the wrapping (softly curved ends) using red ellipses
     wrapper_width = 10
     wrapper_height = 5
-    # Left wrapper (ellipse on the left)
     pygame.draw.ellipse(screen, RED, (position[0] - candy_width // 2 - wrapper_width, position[1] - wrapper_height // 2, wrapper_width, wrapper_height))
-    # Right wrapper (ellipse on the right)
     pygame.draw.ellipse(screen, RED, (position[0] + candy_width // 2, position[1] - wrapper_height // 2, wrapper_width, wrapper_height))
 
     # Render level number text in red and bold, centered on the candy
-    text = bold_font.render(str(level_num), True, RED)  # Use red text
+    text = bold_font.render(str(level_num), True, RED)
     screen.blit(text, text.get_rect(center=position))
 
     # Return the button rectangle for click detection
@@ -95,7 +103,7 @@ def level_selection(screen):
             mouse_pos = pygame.mouse.get_pos()
             # Check if logout button is clicked
             if logout_button_rect.collidepoint(mouse_pos):
-                print("Logout button clicked")  # Placeholder for logout action
+                update_current_user()  # Update currentUser.json to reset user data
                 return "logout"  # Return logout signal for handling in main
 
             # Check if any level button is clicked
@@ -107,26 +115,3 @@ def level_selection(screen):
     # Refresh the screen
     pygame.display.flip()
     return None  # No action if no button was clicked
-
-# Main function to run the level selection screen
-def main():
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Level Selection")
-
-    running = True
-    while running:
-        selected_action = level_selection(screen)
-
-        if selected_action == "quit":
-            running = False
-        elif selected_action == "logout":
-            print("Logging out...")  # Placeholder for actual logout logic
-            running = False  # Close the screen after logging out
-        elif isinstance(selected_action, int):  # If a level number is returned
-            print(f"Proceeding to Level {selected_action}")
-            # Placeholder for transitioning to the selected level
-
-    pygame.quit()
-
-if __name__ == "__main__":
-    main()

@@ -50,7 +50,6 @@ def load_user_data():
             username = current_user.get("username")
             if username:
                 user_data = fetch_user(username)  # Assuming fetch_user fetches user data from the database
-                print(f"User '{username}' logged in.")
             else:
                 user_data = None
     else:
@@ -73,7 +72,7 @@ while running:
     if game_state == "main_menu":
         frame_index = main_menu_screen(screen, frames, frame_index, user_data)  # Pass user_data to main menu
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(20)
     
     elif game_state == "login_menu":
         result = get_started_screen(screen)
@@ -81,18 +80,26 @@ while running:
             game_state = "level_selection"
     
     elif game_state == "level_selection":
-        selected_level = level_selection(screen)
-        if selected_level == "quit":
+        selected_action = level_selection(screen)
+        if selected_action == "quit":
             running = False
-        elif selected_level is not None:
-            level = selected_level
-            level_data = level_configs.get(selected_level)
+        elif selected_action == "logout":
+            load_user_data()  # Reload currentUser.json to update user_data
+            game_state = "main_menu"  # Return to main menu
+        elif isinstance(selected_action, int):  # If a level number is returned
+            level = selected_action
+            level_data = level_configs.get(level)
             if level_data:
                 game_state = "game_screen"
     
     elif game_state == "game_screen" and level_data is not None:
-        currency = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
-        game_state = "end_game"
+        action = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
+        if action == "restart":
+            continue  # Restart current level
+        elif action == "home":
+            game_state = "level_selection"
+        elif action == "end_game":
+            game_state = "end_game"
     
     elif game_state == "shop":
         currency = shop_screen(screen, font, currency)
