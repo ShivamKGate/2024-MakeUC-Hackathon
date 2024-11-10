@@ -1,6 +1,5 @@
-# level_selection.py
-
 import pygame
+import math
 
 # Initialize Pygame and font module
 pygame.init()
@@ -10,12 +9,14 @@ pygame.font.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
 # Colors
-WHITE = (255, 255, 255)
-BLUE = (0, 102, 204)
-RED = (255, 0, 0)  # Color for the logout button
+FADED_OCHRE_YELLOW = (245, 222, 179)  # Faded ochre yellow for the candy body
+RED = (255, 0, 0)  # Red for text and the wrapper
+BLACK = (0, 0, 0)  # Black color for the text
 
-# Font
-font = pygame.font.Font(None, 36)
+# Font (set to bold)
+font = pygame.font.Font(None, 36)  # Default font size
+bold_font = pygame.font.Font(None, 36)
+bold_font.set_bold(True)  # Make the font bold
 
 # Level positions (coordinates based on the desired layout)
 level_positions = [
@@ -33,17 +34,35 @@ def init_background():
     background_image = pygame.image.load(background_image_path)
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Draw level buttons on the screen
-def draw_level_button(screen, level_num, position):
-    text = font.render(str(level_num), True, WHITE)
-    button_rect = pygame.Rect(position[0] - 20, position[1] - 20, 40, 40)
-    pygame.draw.circle(screen, BLUE, position, 15)  # Circle as the button
+# Function to draw a simple candy button
+def draw_candy_button(screen, level_num, position):
+    # Candy body size and position
+    candy_width = 35
+    candy_height = 30
+    candy_rect = pygame.Rect(position[0] - candy_width // 2, position[1] - candy_height // 2, candy_width, candy_height)
+
+    # Draw the candy body as a solid faded ochre yellow color
+    pygame.draw.ellipse(screen, FADED_OCHRE_YELLOW, candy_rect)
+
+    # Draw the wrapping (softly curved ends) using red ellipses
+    wrapper_width = 10
+    wrapper_height = 5
+    # Left wrapper (ellipse on the left)
+    pygame.draw.ellipse(screen, RED, (position[0] - candy_width // 2 - wrapper_width, position[1] - wrapper_height // 2, wrapper_width, wrapper_height))
+    # Right wrapper (ellipse on the right)
+    pygame.draw.ellipse(screen, RED, (position[0] + candy_width // 2, position[1] - wrapper_height // 2, wrapper_width, wrapper_height))
+
+    # Render level number text in red and bold, centered on the candy
+    text = bold_font.render(str(level_num), True, RED)  # Use red text
     screen.blit(text, text.get_rect(center=position))
+
+    # Return the button rectangle for click detection
+    button_rect = pygame.Rect(position[0] - candy_width // 2, position[1] - candy_height // 2, candy_width, candy_height)
     return button_rect
 
 # Draw logout button on the screen
 def draw_logout_button(screen):
-    logout_text = font.render("Logout", True, WHITE)
+    logout_text = font.render("Logout", True, FADED_OCHRE_YELLOW)
     logout_button_rect = pygame.Rect(SCREEN_WIDTH - 100, 10, 80, 40)  # Top right position
     pygame.draw.rect(screen, RED, logout_button_rect)  # Red rectangle for the logout button
     screen.blit(logout_text, logout_text.get_rect(center=logout_button_rect.center))
@@ -60,7 +79,7 @@ def level_selection(screen):
     # Draw level buttons and store button rects for click detection
     level_buttons = []
     for i, pos in enumerate(level_positions):
-        button_rect = draw_level_button(screen, i + 1, pos)
+        button_rect = draw_candy_button(screen, i + 1, pos)
         level_buttons.append((button_rect, i + 1))  # Store button and level number
 
     # Draw the logout button
