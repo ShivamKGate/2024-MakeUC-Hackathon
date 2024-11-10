@@ -19,8 +19,8 @@ font = pygame.font.Font(None, 36)
 
 # Level positions (coordinates based on the desired layout)
 level_positions = [
-    (600, 550), (500, 550), (400, 550), (460, 550), (200, 550),
-    (400, 250), (460, 230), (520, 210), (580, 190), (100, 550)
+    (530, 560), (450, 565), (350, 555),  (310, 510), (400, 475),
+    (475, 455), (420, 420), (350, 400), (380, 360), (395, 315)
 ]
 
 # Load background image (replace with your image path)
@@ -37,7 +37,7 @@ def init_background():
 def draw_level_button(screen, level_num, position):
     text = font.render(str(level_num), True, WHITE)
     button_rect = pygame.Rect(position[0] - 20, position[1] - 20, 40, 40)
-    pygame.draw.circle(screen, BLUE, position, 20)  # Circle as the button
+    pygame.draw.circle(screen, BLUE, position, 15)  # Circle as the button
     screen.blit(text, text.get_rect(center=position))
     return button_rect
 
