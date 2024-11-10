@@ -2,8 +2,10 @@ import pygame
 import sys
 import os
 from screens.main_menu import main_menu_screen, load_and_resize_gif
-from screens.game_screen import game_screen, level_selection, level_configs
+from screens.level_selection import level_selection
+from screens.game_screen import game_screen, level_configs
 from screens.shop import shop_screen
+from screens.get_started import get_started_screen
 from screens.end_game import end_game_screen
 
 # Pygame initialization
@@ -50,11 +52,24 @@ while True:
         pygame.display.flip()
         clock.tick(10)
     
+        
+    elif game_state == "login_menu":
+        # Call get_started_screen function to show login/signup screen
+        result = get_started_screen(screen)
+        if result == "main_lobby":
+            game_state = "level_selection"  # Set game state to main menu after login success
+    
     elif game_state == "level_selection":
-        level = level_selection(screen, font)
-        level_data = level_configs.get(level)
-        if level_data:
-            game_state = "game_screen"
+        # Level selection screen
+        # Call the level selection screen and handle level selection
+        selected_level = level_selection(screen)
+        if selected_level == "quit":
+            running = False  # Quit the game if the quit event was received
+        elif selected_level is not None:
+            print(f"Starting Level {selected_level}")
+        level_data = level_configs.get(selected_level)  # Retrieve configuration for the selected level
+        if level_data:  # Ensure level_data is valid
+            game_state = "game_screen"  # Move to game screen after selection
 
     elif game_state == "game_screen" and level_data is not None:
         currency = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
@@ -82,6 +97,10 @@ while True:
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                game_state = "level_selection"
+                game_state = "login_menu"  # Move to level selection screen if clicked
+                # if play_button_rect.collidepoint(event.pos):
+                #     game_state = "level_selection"  # Move to level selection screen if play is clicked
+                # elif shop_button_rect.collidepoint(event.pos):
+                #     game_state = "shop"  # Move to shop screen if shop is clicked
     
     pygame.display.flip()
