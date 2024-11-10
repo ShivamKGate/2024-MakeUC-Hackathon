@@ -98,6 +98,7 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
                 game_state = "login_menu"  # Move to login menu on click
+                game_state = "level_selection"
             elif game_state == "login_menu":
                 if result == "main_lobby":
                     game_state = "level_selection"
