@@ -49,7 +49,7 @@ pygame.mixer.music.play(-1)
 # Function to load user data from currentUser.json
 def load_user_data():
     global user_data
-    file_path = "currentUser.json"
+    file_path = "./currentUser.json"
     if os.path.exists(file_path):
         with open(file_path, "r") as file:
             current_user = json.load(file)
@@ -90,8 +90,7 @@ while running:
         if selected_action == "quit":
             running = False
         elif selected_action == "logout":
-            load_user_data()  # Reload currentUser.json to update user_data
-            game_state = "main_menu"  # Return to main menu
+            game_state = "main_menu"  
         elif isinstance(selected_action, int):  # If a level number is returned
             level = selected_action
             level_data = level_configs.get(level)
@@ -139,7 +138,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if game_state == "main_menu":
-                game_state = "login_menu"  # Move to login menu on click
+                game_state = "login_menu" if user_data is None else "level_selection"  # Check login status
             elif game_state == "login_menu" and result == "main_lobby":
                 game_state = "level_selection"
             elif game_state == "end_game":
