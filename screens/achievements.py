@@ -30,7 +30,7 @@ def achievements_screen(screen, font, earned_facts, SCREEN_WIDTH, SCREEN_HEIGHT,
         y_offset += line_height  # Move y_offset for the next line
 
     # Back button to return to the main menu or previous screen
-    back_button_text = font.render("Back", True, (0, 0, 0))
+    back_button_text = font.render("Home", True, (0, 0, 0))
     back_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT - 60), (100, 40))
     pygame.draw.rect(screen, (200, 200, 200), back_button_rect)  # Light grey background for button
     pygame.draw.rect(screen, (0, 0, 0), back_button_rect, 2)  # Black border for button

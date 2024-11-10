@@ -87,12 +87,16 @@ while running:
             game_state = "level_selection"
     
     elif game_state == "level_selection":
-        selected_action = level_selection(screen)
+        selected_action = level_selection(screen, user_data)
         if selected_action == "quit":
             running = False
         elif selected_action == "logout":
             load_user_data()
-            game_state = "main_menu"  
+            game_state = "main_menu"
+        elif selected_action == "shop":
+            game_state = "shop"
+        elif selected_action == "achievements":
+            game_state = "achievements"
         elif isinstance(selected_action, int):  # If a level number is returned
             level = selected_action
             level_data = level_configs.get(level)
@@ -102,7 +106,8 @@ while running:
     elif game_state == "game_screen" and level_data is not None:
         action = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level)
         if action == "restart":
-            continue  # Restart current level
+            # continue  # Restart current level
+            game_state = "game_screen"
         elif action == "home":
             game_state = "level_selection"
         elif action == "end_game":
@@ -132,7 +137,7 @@ while running:
         # Display achievements screen
         result = achievements_screen(screen, font, earned_facts, SCREEN_WIDTH, SCREEN_HEIGHT, scroll_offset)
         if result == "back":
-            game_state = "end_game"  # Return to end game screen
+            game_state = "level_selection"  # Return to end game screen
     
     # Event handling for quitting
     for event in pygame.event.get():
