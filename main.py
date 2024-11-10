@@ -90,6 +90,7 @@ while running:
         if selected_action == "quit":
             running = False
         elif selected_action == "logout":
+            load_user_data()
             game_state = "main_menu"  
         elif isinstance(selected_action, int):  # If a level number is returned
             level = selected_action
