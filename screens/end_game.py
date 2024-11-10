@@ -10,9 +10,10 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     # Cycle through GIF frames
     frame_index = (frame_index + 1) % len(frames)
     
-    text_color = (0, 0, 0)
-    button_color = (200, 200, 200)
-    hover_color = (150, 150, 150)
+    text_color = (255, 255, 0)  # White text color
+    button_color = (0, 255, 255)  # Light blue button color
+    hover_color = (255, 165, 0)  # Dodger Blue hover color
+
     
     # Display end game message
     end_text = font.render(f"Level {level} Completed!", True, text_color)
