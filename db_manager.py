@@ -1,4 +1,5 @@
 import bcrypt
+import json
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
@@ -23,6 +24,7 @@ def create_user(email, password, player_name):
         "playerName": player_name,
         "currentLevel": 1,
         "highestScore": 0,
+        "currentCurrency": 0,  # Initialize with 0 currency
         "previousGames": [],
         "Achievements": []
     }
@@ -67,3 +69,42 @@ def update_current_level(player_name, new_level):
     except Exception as e:
         print(f"Failed to update level: {e}")
         return False
+
+def update_currency(player_name, amount):
+    login_data_collection.update_one(
+        {"playerName": player_name},
+        {"$inc": {"currentCurrency": amount}}
+    )
+
+def get_currency(player_name):
+    user = login_data_collection.find_one({"playerName": player_name})
+    return user.get("currentCurrency", 0) if user else 0
+
+def purchase_item(player_name, item_cost):
+    user = login_data_collection.find_one({"playerName": player_name})
+    if user and user.get("currentCurrency", 0) >= item_cost:
+        update_currency(player_name, -item_cost)
+        return True  # Purchase successf
+
+def fetch_user_data(username):
+    """
+    Fetch complete user data from the database by username (playerName).
+    Saves the data to currentUser.json and returns it.
+    
+    :param username: The user's playerName.
+    :return: The user document or None if not found.
+    """
+    user = login_data_collection.find_one({"playerName": username})
+    
+    if user:
+        # Remove MongoDB's default ObjectId to make it JSON-serializable
+        user["_id"] = str(user["_id"])
+        user.pop("password", None)  # Remove the "password" field, if it exists
+        
+        # Save user data to currentUser.json
+        with open("currentUser.json", "w") as file:
+            json.dump(user, file, indent=4)
+        
+        return user  # Return the user data as a dictionary
+    
+    return None  # Return None if user not found

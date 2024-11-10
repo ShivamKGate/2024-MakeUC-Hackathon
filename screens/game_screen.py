@@ -2,7 +2,7 @@ import pygame
 import random
 import time
 import json
-from db_manager import update_current_level, get_current_level
+from db_manager import update_current_level, get_current_level, update_currency, get_currency, fetch_user_data
 pygame.mixer.init()
 
 FADED_OCHRE_YELLOW = (245, 222, 179)  # Faded ochre yellow for shadow
@@ -60,10 +60,11 @@ def pause_menu(screen, font):
 def check_level_completion(username, score, score_threshold=50):
     """Check if player has met score threshold to advance levels."""
     current_level = get_current_level(username)
-    if score >= score_threshold and update_current_level(username, current_level + 1):
-        with open("currentUser.json", "w") as file:
-            json.dump({"playerName": username, "currentLevel": current_level + 1}, file)
-        return True
+    current_currency = get_currency(username)
+    if current_level < 10:
+        if score >= score_threshold and update_current_level(username, current_level + 1):
+            fetch_user_data(username)
+            return True
     return False
 
 def display_level_up_message(username, screen):
@@ -185,6 +186,9 @@ def game_screen(screen, font, player_image, middle_trash_image, trash_image, scr
                     storage += 1
                     score += 1 * multiplier
                     streak += 1
+                    # Update the currency for each piece of trash collected
+                    user_data["currentCurrency"] += 1  # Add currency locally
+                    update_currency(user_data["playerName"], 1)  # Update currency in the database
                     if time.time() - last_trash_collected_time <= 5:
                         multiplier = streak
                     else:

@@ -2,7 +2,7 @@ import json
 import os
 import pygame
 import math
-from db_manager import get_current_level
+from db_manager import get_current_level, get_currency
 
 # Initialize Pygame and font module
 pygame.init()
@@ -19,8 +19,8 @@ BLACK = (0, 0, 0)  # Black color for text
 WHITE = (255, 255, 255)  # White for text
 
 # Font (set to bold)
-font = pygame.font.Font(None, 36)
-bold_font = pygame.font.Font(None, 48)
+font = pygame.font.Font(None, 28)
+bold_font = pygame.font.Font(None, 40)
 bold_font.set_bold(True)
 
 # Level positions (coordinates based on the desired layout)
@@ -45,7 +45,13 @@ def update_current_user():
     default_user_data = {"playerName": "", "email": "", "currentLevel": 0}
     with open(file_path, "w") as file:
         json.dump(default_user_data, file)
-    print("User logged out, currentUser.json updated.")
+    print("User logged out!")
+
+
+# Draw currency display
+def draw_currency_display(screen, currency):
+    currency_text = font.render(f"Currency: {currency}", True, (255, 215, 0))  # Gold color
+    screen.blit(currency_text, (10, 50))  # Position as desired
 
 # Function to draw a simple candy button
 def draw_candy_button(screen, level_num, position, enabled=True):
@@ -84,6 +90,11 @@ def draw_welcome_message(screen, player_name):
     welcome_rect = welcome_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 250))
     screen.blit(welcome_text, welcome_rect)
 
+    # Render the balance text below the welcome message
+    balance_text = font.render(f"Your Balance: {get_currency(player_name)}", True, (0, 128, 0))  # Green color for balance
+    balance_rect = balance_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 200))
+    screen.blit(balance_text, balance_rect)
+
 # Display the menu with options
 def display_menu(screen):
     menu_options = ["Back", "Shop", "Unlocked Facts", "Quit"]
@@ -111,7 +122,7 @@ def level_selection(screen, user_data):
         draw_candy_button(screen, i + 1, pos, enabled)
         button_rect = pygame.Rect(pos[0] - 20, pos[1] - 15, 40, 30)  # Create the button rect for click detection
         level_buttons.append((button_rect, i + 1, enabled))  # Store button rect, level number, and enabled state
-
+    draw_currency_display(screen, user_data["currentCurrency"])
     logout_button_rect = draw_logout_button(screen)
     menu_button_rect = draw_menu_button(screen)
     draw_welcome_message(screen, user_data["playerName"] if user_data else "Player")

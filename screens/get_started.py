@@ -3,7 +3,7 @@ import pygame
 import os
 import sys
 import json
-from db_manager import create_user, login_user
+from db_manager import create_user, login_user, fetch_user_data
 
 pygame.key.set_repeat(300, 50)
 
@@ -52,11 +52,6 @@ class InputBox:
 
     def is_filled(self):
         return bool(self.text)
-
-# Function to save user data to `currentUser.json`
-def save_user_data(user_data):
-    with open("currentUser.json", "w") as file:
-        json.dump(user_data, file)
 
 # Function to handle login/signup screen
 def get_started_screen(screen):
@@ -158,12 +153,7 @@ def get_started_screen(screen):
                 if current_page == "login" and login_button.collidepoint(event.pos) and email_box_login.is_filled() and password_box_login.is_filled():
                     user = login_user(email_box_login.text, password_box_login.text)
                     if user:
-                        user_data = {
-                            "playerName": user["playerName"],
-                            "email": user["email"],
-                            "currentLevel": user["currentLevel"]
-                        }
-                        save_user_data(user_data)  # Save or update `currentUser.json`
+                        fetch_user_data(user["playerName"])
                         return "main_lobby"  # Move to main lobby on successful login
                     else:
                         error_message = "Invalid email or password!"

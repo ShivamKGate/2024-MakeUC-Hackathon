@@ -1,1 +1,10 @@
-{"playerName": "222", "currentLevel": 5}
+{
+    "_id": "673003aa94e2ff1ef6e55c45",
+    "email": "22",
+    "playerName": "222",
+    "currentLevel": 7,
+    "highestScore": 0,
+    "previousGames": [],
+    "Achievements": [],
+    "currentCurrency": 2796560
+}

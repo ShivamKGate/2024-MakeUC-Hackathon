@@ -2,7 +2,8 @@ import pygame
 import sys
 import os
 import json
-from db_manager import fetch_user, update_current_level, get_current_level # Assuming fetch_user(email) retrieves user from DB
+from db_manager import fetch_user, update_current_level, get_current_level, get_currency, fetch_user_data # Assuming fetch_user(email) retrieves user from DB
+from factsdb_manager import get_random_facts_by_level
 from screens.main_menu import main_menu_screen, load_and_resize_gif
 from screens.level_selection import level_selection
 from screens.game_screen import game_screen, level_configs, check_level_completion, display_level_up_message
@@ -58,8 +59,7 @@ def load_user_data():
             current_user = json.load(file)
             username = current_user.get("playerName")
             if username:
-                user_data = fetch_user(username)
-                user_data["currentLevel"] = get_current_level(username)  # Add current level
+                user_data = fetch_user_data(username)
             else:
                 user_data = None
     else:
@@ -81,72 +81,98 @@ while running:
     
     # Main menu and game state handling
     if game_state == "main_menu":
+        load_user_data()
         frame_index = main_menu_screen(screen, frames, frame_index, user_data)  # Pass user_data to main menu
         pygame.display.flip()
         clock.tick(20)
+        load_user_data()
     
     elif game_state == "login_menu":
+        load_user_data()
         result = get_started_screen(screen)
         if result == "main_lobby":
+            load_user_data()
             game_state = "level_selection"
     
     elif game_state == "level_selection":
+        load_user_data()
         selected_action = level_selection(screen, user_data)
         if selected_action == "quit":
+            load_user_data()
             running = False
         elif selected_action == "logout":
             load_user_data()
             game_state = "main_menu"
         elif selected_action == "shop":
+            load_user_data()
             game_state = "shop"
         elif selected_action == "achievements":
+            load_user_data()
             game_state = "achievements"
         elif isinstance(selected_action, int):  # If a level number is returned
+            load_user_data()
             level = selected_action
             level_data = level_configs.get(level)
             if level_data:
                 game_state = "game_screen"
     
     elif game_state == "game_screen" and level_data is not None:
+        load_user_data()
         score, action = game_screen(screen, font, player_image, middle_trash_image, trash_image, SCREEN_WIDTH, SCREEN_HEIGHT, level_data, level, user_data)
         # Check if player leveled up after game completion
+        load_user_data()
         if action == "restart":
+            load_user_data()
             game_state = "game_screen"
         elif action == "home":
+            load_user_data()
             game_state = "level_selection"
         elif action == "end_game":
-            print("User Name: " + user_data["playerName"])
-            print("current level: " + str(user_data["currentLevel"]))
-            print("Score: " + str(score))
             if check_level_completion(user_data["playerName"], score):
                 display_level_up_message(user_data["playerName"], screen)  # Show level-up message
-                # user_data["currentLevel"] += 1  # Update local level after successful DB update
+            load_user_data()
             game_state = "end_game"
     
     elif game_state == "shop":
-        currency = shop_screen(screen, font, currency)
-        game_state = "main_menu"
-    
+        load_user_data()
+        currency = shop_screen(screen, font, user_data["currentCurrency"], user_data)
+        if currency == -101010101:
+            load_user_data()
+            game_state = "shop"
+        elif currency == 101010101:
+            load_user_data()
+            game_state = "achievements"
+        else:
+            load_user_data()
+            game_state = "level_selection"
     elif game_state == "end_game":
+        load_user_data()
         # Unpack four values if end_game_screen returns four values
         action, frame_index, random_facts, scroll_offset = end_game_screen(
             screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index, random_facts, scroll_offset
         )
+        load_user_data()
         if action == "replay":
+            load_user_data()
             game_state = "game_screen"
         elif action == "level_selection":
+            load_user_data()
             game_state = "level_selection"
         elif action == "main_menu":
+            load_user_data()
             game_state = "main_menu"
         elif action == "quit":
             running = False
         elif action == "achievements":
+            load_user_data()
             game_state = "achievements"  # Go to achievements screen
 
     elif game_state == "achievements":
+        load_user_data()
         # Display achievements screen
         result = achievements_screen(screen, font, earned_facts, SCREEN_WIDTH, SCREEN_HEIGHT, scroll_offset)
         if result == "back":
+            load_user_data()
             game_state = "level_selection"  # Return to end game screen
     
     # Event handling for quitting
