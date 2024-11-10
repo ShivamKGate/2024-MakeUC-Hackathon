@@ -1,7 +1,6 @@
 import json
 import os
 import pygame
-import math
 from db_manager import get_current_level, get_currency
 
 # Initialize Pygame and font module
@@ -47,20 +46,23 @@ def update_current_user():
         json.dump(default_user_data, file)
     print("User logged out!")
 
-
 # Draw currency display
 def draw_currency_display(screen, currency):
     currency_text = font.render(f"Currency: {currency}", True, (255, 215, 0))  # Gold color
     screen.blit(currency_text, (10, 50))  # Position as desired
 
-# Function to draw a simple candy button
+# Function to draw a circular candy button
 def draw_candy_button(screen, level_num, position, enabled=True):
-    color = FADED_OCHRE_YELLOW if enabled else (200, 200, 200)  # Duller color for disabled levels
-    pygame.draw.ellipse(screen, color, pygame.Rect(position[0] - 20, position[1] - 15, 40, 30))
+    radius = 20  # Radius for a circular candy shape
+    color = FADED_OCHRE_YELLOW if enabled else (200, 200, 200)  # Grayish color if level is disabled
+
+    # Draw the candy as a circle
+    pygame.draw.circle(screen, color, position, radius)
+
+    # Set the text color based on whether the level is enabled
     text_color = RED if enabled else (150, 150, 150)  # Duller text color if disabled
     text = font.render(str(level_num), True, text_color)
     screen.blit(text, text.get_rect(center=position))
-
 
 # Draw the logout button
 def draw_logout_button(screen):
@@ -177,3 +179,31 @@ def level_selection(screen, user_data):
                         return level_num
 
         pygame.display.flip()
+
+# Main function to run the level selection screen
+def main():
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Level Selection")
+
+    user_data = {
+        "playerName": "Player1",
+        "currentCurrency": 1000
+    }  # Example user data
+
+    running = True
+    while running:
+        selected_action = level_selection(screen, user_data)
+
+        if selected_action == "quit":
+            running = False
+        elif selected_action == "logout":
+            print("Logging out...")
+            running = False
+        elif isinstance(selected_action, int):  # If a level number is returned
+            print(f"Proceeding to Level {selected_action}")
+            # Placeholder for transitioning to the selected level
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
