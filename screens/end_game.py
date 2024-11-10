@@ -2,7 +2,7 @@ import pygame
 import sys
 
 def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, frames, frame_index):
-    screen.fill((255, 255, 255))  # Set background color
+    screen.fill((0, 0, 0))  # Set background color
     
     # Display the current GIF frame
     screen.blit(frames[frame_index], (0, 0))  # Adjust position as needed
@@ -10,9 +10,11 @@ def end_game_screen(screen, font, currency, level, SCREEN_WIDTH, SCREEN_HEIGHT, 
     # Cycle through GIF frames
     frame_index = (frame_index + 1) % len(frames)
     
-    text_color = (255, 255, 0)  # White text color
-    button_color = (0, 255, 255)  # Light blue button color
-    hover_color = (255, 165, 0)  # Dodger Blue hover color
+    text_color = (0, 0, 0)  # White text color
+    button_color = (255, 165, 0)  # Bright orange button color
+    hover_color = (255, 140, 0)   # Darker orange (yellow-orange) hover color
+
+
 
     
     # Display end game message
