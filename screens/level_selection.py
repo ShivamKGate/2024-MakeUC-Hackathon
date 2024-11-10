@@ -20,7 +20,7 @@ font = pygame.font.Font(None, 36)
 # Level positions (coordinates based on the desired layout)
 level_positions = [
     (600, 550), (500, 550), (400, 550), (460, 550), (200, 550),
-    (400, 250), (460, 230), (520, 210), (580, 190), (-100, 550)
+    (400, 250), (460, 230), (520, 210), (580, 190), (100, 550)
 ]
 
 # Load background image (replace with your image path)
